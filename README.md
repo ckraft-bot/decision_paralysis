@@ -2,7 +2,7 @@
 
 # Meal Planner
   
-This Python script generates a weekend itinerary consisting of activities for Friday, Saturday, and Sunday. The activities are categorized into exercise, chore, and leisure. The script randomly selects one exercise activity, two chore activities, and two leisure activities for each day and combines them into a full itinerary.  
+This Python script generates a meal plan for the week by randomly selecting a meal option for each day of the week. The meal options and days are defined in the code using Python lists. The program uses the pandas library to convert the generated meal plan into a DataFrame and save it as a CSV file with the current date in the filename. Finally, the program prints a message confirming that the meal plan has been exported.
 
   
 ## Requirements  
