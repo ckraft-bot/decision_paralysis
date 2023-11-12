@@ -22,7 +22,7 @@ This Python script generates a weekend itinerary consisting of activities for Fr
 ## Requirements  
   
 - Python 3.10.8
-- `win10toast==0.9` library (can be installed via pip)  
+- `win10toast==0.9` 
   
 ## Customization  
   
