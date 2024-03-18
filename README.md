@@ -10,7 +10,7 @@ Save as csv file with timestamp:
 
 See the plan in the csv file
 
-![The output](meal_planner_export.PNG)
+![The output content](meal_planner_export.PNG)
 
 __Requirements__
   
@@ -25,7 +25,7 @@ You can modify the meal options or add new ones as per your preference. Just edi
   
 This Python script generates a weekend itinerary consisting of activities for Friday, Saturday, and Sunday. The activities are categorized into exercise, chore, and leisure. The script randomly selects one exercise activity, two chore activities, and two leisure activities for each day and combines them into a full itinerary.  
 
-  
+![noptification center](weekend_planner_notification.PNG)
 
 __Requirements__ 
   
