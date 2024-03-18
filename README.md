@@ -4,7 +4,10 @@
   
 This Python script generates a meal plan for the week by randomly selecting a meal option for each day of the week. The meal options and days are defined in the code using Python lists. The program uses the pandas library to convert the generated meal plan into a DataFrame and save it as a CSV file with the current date in the filename. Finally, the program prints a message confirming that the meal plan has been exported.
 
-  
+Save as csv
+![The output](meal_planner_table.PNG)
+![The output](meal_planner_export.PNG)
+
 __Requirements__
   
 - Python 3.10.8
@@ -12,9 +15,6 @@ __Requirements__
 __Customization__
   
 You can modify the meal options or add new ones as per your preference. Just edit the `meal_option` list in the script to include your desired activities.  
-
-
-![The output](meal_planner_table.PNG)
 
   
 ## Weekend Planner
