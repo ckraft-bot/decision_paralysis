@@ -13,6 +13,9 @@ __Customization__
   
 You can modify the meal options or add new ones as per your preference. Just edit the `meal_option` list in the script to include your desired activities.  
 
+
+![The output](meal_planner_table.PNG)
+
   
 ## Weekend Planner
   
