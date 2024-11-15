@@ -20,9 +20,9 @@ SUBJECT = "Weekly Meal Plan"
 # Meal options
 COOK_OPTIONS = [
     'Fruit smoothie', 'Gyeran', 'Japchae', 'Kimchi fried rice',
-    'Kimbap bowl', 'Mandoo', 'No name stir fry', 'Omurice',
-    'Pajun', 'Pad woon sen', 'Ramen', 'Tilapia & baked vegetables', 
-    'Tofu jorim, rice & seaweed'
+    'Kimbap bowl', 'Mandoo', 'Omurice', 'Pajun', 
+    'Pad woon sen', 'Ramen', 'Tilapia & baked vegetables', 
+    'Tofu jorim', 'rice & seaweed', 'Tomato and egg'
 ]
 
 ORDER_OUT_OPTIONS = [
@@ -79,12 +79,21 @@ def send_email(meal_df):
         print(f"Email sent to {receiver_email}")
     except smtplib.SMTPException as e:
         print(f"Failed to send email: {e}")
-
+    
 def main():
     """Main function to generate meal plan and send email."""
     meal_df = generate_meal_plan()
     print(meal_df)
-    send_email(meal_df)
+    # send_email(meal_df)
+
+    # Convert DataFrame to markdown format
+    markdown_content = meal_df.to_markdown(index=False)
+    
+    # Save the markdown to a file
+    with open('weekly_meal_plan_export.txt', 'w') as file:
+        file.write(markdown_content)
+    
+    print("Markdown file 'weekly_meal_plan.md' has been saved.")
 
 if __name__ == "__main__":
     main()
