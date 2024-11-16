@@ -19,13 +19,108 @@ SUBJECT = "Weekly Meal Plan"
 
 # Meal options
 COOK_OPTIONS = [
-    'Bibimbab', 'Buddha bowl', 'Fruit smoothie', 'Gyeran', 
-    'Gyeran mari', 'Japchae', 'Kimchi Jjigae', 'Kimchi fried rice', 
-    'Kimbap bowl', 'Mandoo', 'Omurice', 'Pad woon sen', 
-    'Pajun', 'Ramen', 'Shrimp tacos', 'Soy sauce noodles', 
-    'Spicy ramen', 'Tilapia & baked vegetables', 
-    'Tofu jorim', 'Tomato and egg', 'rice & seaweed'
+    'Bibimbab', 'Buddha bowl', 'Fruit smoothie', 'Gyeran mari', 
+    'Japchae', 'Kimchi Jjigae', 'Kimchi fried rice', 'Kimbap bowl', 
+    'Mandoo', 'Omurice', 'Pad woon sen', 'Pajun', 
+    'Ramen', 'Shrimp tacos', 'Soy sauce noodles', 'Spicy ramen', 
+    'Tilapia & baked vegetables', 'Tofu jorim', 'Tomato and egg', 'rice & seaweed'
 ]
+
+INGREDIENTS = {
+    "Bibimbab": {
+        "Rice": [
+            "3 cups short grain rice"
+        ],
+        "Meat": [
+            "8 ounces thinly sliced tender beef (rib eye, sirloin, etc. or ground beef)",
+            "1.5 tablespoons soy sauce",
+            "2 teaspoons sugar",
+            "2 teaspoons sesame oil",
+            "2 teaspoons rice wine",
+            "1 teaspoon minced garlic",
+            "1 tablespoon chopped scallion",
+            "pepper to taste"
+        ],
+        "Vegetables and Eggs": [
+            "8 ounces mung bean sprouts (sukju, 숙주) or soybean sprouts (kongnamul, 콩나물)",
+            "1 bunch spinach, about 8 ounces",
+            "2 small cucumbers, about 5 ounces",
+            "4 ounces mushrooms (shiitake, white, cremini, etc.)",
+            "2 medium carrots, about 5 ounces",
+            "1.5 teaspoons minced garlic, divided",
+            "3 tablespoons chopped scallion, divided",
+            "sesame oil",
+            "sesame seeds",
+            "salt",
+            "4 eggs - optional",
+            "cooking oil"
+        ],
+        "More Vegetable Options": [
+            "8 ounces Kongnamul (soybean sprouts)",
+            "10 ounces mu (Korean radish)"
+        ],
+        "Bibimbap Sauce": [
+            "4 tablespoons gochujang",
+            "2 teaspoons sugar - adjust to taste, 1-3 teaspoons",
+            "1 tablespoon sesame oil",
+            "1 tablespoon water"
+        ]
+    },
+    "Buddha Bowl": {
+        "Bowl": [
+            "2 cups cooked rice",
+            "1 avocado",
+            "2 red bell peppers",
+            "3 cups chopped kale",
+            "4 green onions chopped",
+            "1 tablespoon olive oil",
+            "Optional: chopped peanuts for garnish"
+        ],
+        "Tofu": [
+            "1 block extra firm tofu",
+            "1 tablespoon low sodium tamari or soy sauce",
+            "1 tsp toasted sesame oil",
+            "1 tablespoon maple syrup or honey",
+            "2 tablespoons corn starch",
+            "2 tablespoons gluten free plain breadcrumbs or regular",
+            "½ cup peanut sauce"
+        ]
+    },
+    "Gyeran": {
+        "Main Ingredients": [
+            "4 - 5 large eggs",
+            "1 cup anchovy broth (or water or dashima broth) adjust to taste",
+            "1.5 teaspoons salted shrimp (saeujeot) or 3/4 teaspoon salt (or fish sauce)",
+            "2 tablespoons chopped scallion",
+            "1 teaspoon sesame oil, divided - optional",
+            "1/2 teaspoon sesame seeds - optional"
+        ]
+    },
+    "Japchae": {
+        "Main Ingredients": [
+            "7 ounces Korean potato starch noodles (dangmyeon, 당면)",
+            "1 carrot (about 3 ounces)",
+            "1/2 medium onion (preferably sweet variety, 4 to 5 ounces)",
+            "2 scallions",
+            "4 ounces lean tender beef (sirloin, chuck tender, rib eye, etc.) or pork loin",
+            "3 to 4 ounces fresh shiitake mushrooms (or 4 to 5 dried shiitake, soaked until plump)",
+            "6 ounces fresh spinach (preferably a bunch of spinach)",
+            "oil for stir frying",
+            "salt",
+            "egg garnish (jidan) - optional"
+        ],
+        "Sauce": [
+            "3.5 tablespoons soy sauce",
+            "3 tablespoons sugar (or brown sugar, you can use a little less if you want)",
+            "2 tablespoons sesame oil",
+            "2 teaspoons minced garlic",
+            "1 tablespoon roasted sesame seeds",
+            "black pepper to taste"
+        ]
+    },
+    
+}
+
 
 
 ORDER_OUT_OPTIONS = [
