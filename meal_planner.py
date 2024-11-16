@@ -19,13 +19,31 @@ SUBJECT = "Weekly Meal Plan"
 
 # Meal options
 COOK_OPTIONS = [
-    'Bibimbab', 'Buddha bowl', 'Fruit smoothie', 'Gyeran mari', 
-    'Japchae', 'Kimchi Jjigae', 'Kimchi fried rice', 'Kimbap bowl', 
-    'Mandoo', 'Omurice', 'Pad woon sen', 'Pajun', 
-    'Ramen', 'Shrimp tacos', 'Soy sauce noodles', 'Spicy ramen', 
-    'Tilapia & baked vegetables', 'Tofu jorim', 'Tomato and egg', 'rice & seaweed'
+    'Bibimbab', 
+    'Buddha bowl', 
+    'Eggplant parmesan', 
+    'Fruit smoothie', 
+    'Gyeran mari', 
+    'Japchae', 
+    'Kimchi jjigae', 
+    'Kimchi fried rice', 
+    'Kimbap bowl', 
+    'Mandoo', 
+    'Omurice', 
+    'Pad woon sen', 
+    'Pajun', 
+    'Ramen', 
+    'Rice & seaweed', 
+    'Shrimp tacos', 
+    'Spicy ramen', 
+    'Tilapia & baked vegetables', 
+    'Tofu jorim', 
+    'Tomato and egg',
+    'Yangchun noodles'
 ]
 
+
+# Ingredients list
 INGREDIENTS = {
     "Bibimbab": {
         "Rice": [
@@ -66,7 +84,7 @@ INGREDIENTS = {
             "1 tablespoon water"
         ]
     },
-    "Buddha Bowl": {
+    "Buddha bowl": {
         "Bowl": [
             "2 cups cooked rice",
             "1 avocado",
@@ -86,7 +104,18 @@ INGREDIENTS = {
             "½ cup peanut sauce"
         ]
     },
-    "Gyeran": {
+    "Eggplant parmesan": {
+        "Main Ingredients": [
+            "3 large eggplant, peeled and thinly sliced",
+            "2 large eggs, beaten",
+            "4 cups Italian seasoned bread crumbs",
+            "6 cups spaghetti sauce, divided",
+            "1 (16 ounce) package mozzarella cheese, shredded and divided",
+            "½ cup grated Parmesan cheese, divided",
+            "½ teaspoon dried basil"
+        ]
+    },
+    "Gyeran mari": {
         "Main Ingredients": [
             "4 - 5 large eggs",
             "1 cup anchovy broth (or water or dashima broth) adjust to taste",
@@ -118,7 +147,124 @@ INGREDIENTS = {
             "black pepper to taste"
         ]
     },
-    
+    "Kimchi jjigae": {
+        "Main Ingredients": [
+            "2 cups packed bite size kimchi fully fermented",
+            "4 ounces fresh pork belly or other pork meat with some fat or other protein choice",
+            "1 to 3 teaspoons gochugaru (Korean red chili pepper flakes) adjust to taste or omit",
+            "1 teaspoon minced garlic",
+            "1 tablespoon cooking oil",
+            "1/2 cup juice from kimchi if available",
+            "6 ounces tofu",
+            "2 scallions",
+            "salt (or a little bit of soup soy sauce or regular soy sauce) and pepper to taste"
+        ]
+    },
+    "Kimchi fried rice": {
+        "Main Ingredients": [
+            "3 tablespoons unsalted butter",
+            "½ small onion, medium dice",
+            "1 cup roughly chopped kimchi (6 ounces)",
+            "2 tablespoons kimchi juice, or to taste",
+            "½ cup small-dice Spam, ham or leftover cooked meat",
+            "2 cups cooked, cooled rice (preferably short-grain)",
+            "2 teaspoons soy sauce, or to taste",
+            "1 teaspoon sesame oil, or to taste",
+            "2 teaspoons vegetable oil",
+            "2 eggs",
+            "Salt to taste",
+            "Crumbled or slivered nori (roasted seaweed) for garnish"
+        ]
+    },
+    'Kimbap bowl': {
+        "Main Ingredients": [
+            "4 gim (김), dried seaweed aka nori",
+            "cooking oil"
+        ],
+        "For the Rice": [
+            "1.5 cups uncooked short grain rice (standard measuring cup not the cup that comes with a rice cooker)",
+            "1 tablespoon sesame oil",
+            "salt to taste (about 1/2 teaspoon) start with a little less"
+        ],
+        "For the Beef": [
+            "8 ounces lean tender beef, cut into thin strips (or bulgogi meat or ground beef)",
+            "2 teaspoons soy sauce",
+            "1 teaspoon rice wine (or mirin)",
+            "1 teaspoon sugar",
+            "1 teaspoon sesame oil",
+            "1/2 teaspoon minced garlic"
+        ],
+        "For the Vegetables": [
+            "1 bunch spinach, about 8 ounces",
+            "1 teaspoon sesame oil",
+            "salt to taste - about 1/4 teaspoon",
+            "2 medium carrots, julienned (or 1/2-inch thick long strips)",
+            "4 strips pre-cut pickled radish (danmuji, 단무지) strips, white or yellow if not pre-cut, cut into about 1/2-inch thick long strips",
+            "4 strips prepared burdock roots (ueong, 우엉) Or make braised burdock roots"
+        ],
+        "For the Egg": [
+            "2 large eggs"
+        ],
+        "For the Fish Cake": [
+            "1 or 2 (if small) sheets fish cake - eomuk (어묵)",
+            "1 teaspoon soy sauce",
+            "1/2 teaspoon sugar",
+            "1/2 teaspoon sesame oil"
+        ]
+},
+    "Omurice": {
+        "Main Ingredients": [
+            "1/2 medium onion finely chopped",
+            "1 scallion finely chopped",
+            "1 small carrot finely chopped",
+            "4 ounces beef or pork, chicken or shrimp, ground or finely chopped",
+            "1 tablespoon soy sauce",
+            "1-1/2 tablespoon ketchup adjust to taste, and more for decoration",
+            "salt and pepper",
+            "Oil for pan frying",
+            "2 servings of cooked rice",
+            "4 eggs"
+        ]
+},
+    "Pajun": {
+        "Main Ingredients": [
+            "2 cups all-purpose flour",
+            "2 large eggs, beaten",
+            "1 teaspoon kosher salt",
+            "1 bunch scallions, green and white parts; halved lengthwise and cut into 2- to 3-inch lengths",
+            "1 1/2 cups water",
+            "1 1/2 tablespoons vegetable oil, for frying",
+            "Soy sauce, or spicy dipping sauce, for serving"
+        ]
+    },
+    "Shrimp tacos": {
+        "Main Ingredients": [
+            "2 pounds large frozen peeled and deveined shrimp, thawed",
+            "1 ½ teaspoons chili powder",
+            "1 teaspoon freshly minced garlic",
+            "½ teaspoon paprika",
+            "½ teaspoon ground cumin",
+            "½ teaspoon salt",
+            "½ teaspoon ground black pepper",
+            "¼ teaspoon ground coriander",
+            "¼ teaspoon grated Valencia orange zest",
+            "2 tablespoons olive oil, or more as needed",
+            "2 tablespoons sour cream",
+            "1 tsp of lemon juice",
+            "1 teaspoon chopped fresh cilantro",
+            "¼ teaspoon garlic powder",
+            "1 pinch salt and ground black pepper",
+            "20 (6 inch) corn tortillas",
+            "2 avocados, thinly sliced, or to taste",
+            "1 red onion, finely diced, or to taste",
+            "½ bunch fresh cilantro, chopped, or to taste",
+            "1 jalapeño pepper, diced, or to taste (Optional)",
+            "2 limes, cut into wedges, or as needed"
+        ]
+},
+
+
+
 }
 
 
