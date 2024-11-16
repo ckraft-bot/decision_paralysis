@@ -19,11 +19,14 @@ SUBJECT = "Weekly Meal Plan"
 
 # Meal options
 COOK_OPTIONS = [
-    'Fruit smoothie', 'Gyeran', 'Japchae', 'Kimchi fried rice',
-    'Kimbap bowl', 'Mandoo', 'Omurice', 'Pajun', 
-    'Pad woon sen', 'Ramen', 'Tilapia & baked vegetables', 
-    'Tofu jorim', 'rice & seaweed', 'Tomato and egg'
+    'Bibimbab', 'Buddha bowl', 'Fruit smoothie', 'Gyeran', 
+    'Gyeran mari', 'Japchae', 'Kimchi Jjigae', 'Kimchi fried rice', 
+    'Kimbap bowl', 'Mandoo', 'Omurice', 'Pad woon sen', 
+    'Pajun', 'Ramen', 'Shrimp tacos', 'Soy sauce noodles', 
+    'Spicy ramen', 'Tilapia & baked vegetables', 
+    'Tofu jorim', 'Tomato and egg', 'rice & seaweed'
 ]
+
 
 ORDER_OUT_OPTIONS = [
     'Order out Korean', 'Order out Japanese', 'Order out Thai', 
@@ -84,16 +87,16 @@ def main():
     """Main function to generate meal plan and send email."""
     meal_df = generate_meal_plan()
     print(meal_df)
-    # send_email(meal_df)
+    send_email(meal_df)
 
     # Convert DataFrame to markdown format
     markdown_content = meal_df.to_markdown(index=False)
     
     # Save the markdown to a file
-    with open('weekly_meal_plan_export.txt', 'w') as file:
-        file.write(markdown_content)
+    # with open('weekly_meal_plan_export.txt', 'w') as file:
+    #     file.write(markdown_content)
     
-    print("Markdown file 'weekly_meal_plan.md' has been saved.")
+    # print("Markdown file 'weekly_meal_plan.md' has been saved.")
 
 if __name__ == "__main__":
     main()
