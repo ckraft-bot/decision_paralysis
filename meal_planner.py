@@ -51,7 +51,7 @@ INGREDIENTS = {
         ],
         "Meat": [
             "8 ounces thinly sliced tender beef (rib eye, sirloin, etc. or ground beef)",
-            "1.5 tablespoons soy sauce",
+            "1 ½ tablespoons soy sauce",
             "2 teaspoons sugar",
             "2 teaspoons sesame oil",
             "2 teaspoons rice wine",
@@ -65,7 +65,7 @@ INGREDIENTS = {
             "2 small cucumbers, about 5 ounces",
             "4 ounces mushrooms (shiitake, white, cremini, etc.)",
             "2 medium carrots, about 5 ounces",
-            "1.5 teaspoons minced garlic, divided",
+            "1 ½ teaspoons minced garlic, divided",
             "3 tablespoons chopped scallion, divided",
             "sesame oil",
             "sesame seeds",
@@ -119,17 +119,17 @@ INGREDIENTS = {
         "Main Ingredients": [
             "4 - 5 large eggs",
             "1 cup anchovy broth (or water or dashima broth) adjust to taste",
-            "1.5 teaspoons salted shrimp (saeujeot) or 3/4 teaspoon salt (or fish sauce)",
+            "1 ½ teaspoons salted shrimp (saeujeot) or 3/4 teaspoon salt (or fish sauce)",
             "2 tablespoons chopped scallion",
             "1 teaspoon sesame oil, divided - optional",
-            "1/2 teaspoon sesame seeds - optional"
+            "½ teaspoon sesame seeds - optional"
         ]
     },
     "Japchae": {
         "Main Ingredients": [
             "7 ounces Korean potato starch noodles (dangmyeon, 당면)",
             "1 carrot (about 3 ounces)",
-            "1/2 medium onion (preferably sweet variety, 4 to 5 ounces)",
+            "½ medium onion (preferably sweet variety, 4 to 5 ounces)",
             "2 scallions",
             "4 ounces lean tender beef (sirloin, chuck tender, rib eye, etc.) or pork loin",
             "3 to 4 ounces fresh shiitake mushrooms (or 4 to 5 dried shiitake, soaked until plump)",
@@ -154,7 +154,7 @@ INGREDIENTS = {
             "1 to 3 teaspoons gochugaru (Korean red chili pepper flakes) adjust to taste or omit",
             "1 teaspoon minced garlic",
             "1 tablespoon cooking oil",
-            "1/2 cup juice from kimchi if available",
+            "½ cup juice from kimchi if available",
             "6 ounces tofu",
             "2 scallions",
             "salt (or a little bit of soup soy sauce or regular soy sauce) and pepper to taste"
@@ -178,13 +178,13 @@ INGREDIENTS = {
     },
     'Kimbap bowl': {
         "Main Ingredients": [
-            "4 gim (김), dried seaweed aka nori",
+            "4 gim, dried seaweed aka nori",
             "cooking oil"
         ],
         "For the Rice": [
-            "1.5 cups uncooked short grain rice (standard measuring cup not the cup that comes with a rice cooker)",
+            "1 ½ cups uncooked short grain rice (standard measuring cup not the cup that comes with a rice cooker)",
             "1 tablespoon sesame oil",
-            "salt to taste (about 1/2 teaspoon) start with a little less"
+            "salt to taste (about ½ teaspoon) start with a little less"
         ],
         "For the Beef": [
             "8 ounces lean tender beef, cut into thin strips (or bulgogi meat or ground beef)",
@@ -192,14 +192,14 @@ INGREDIENTS = {
             "1 teaspoon rice wine (or mirin)",
             "1 teaspoon sugar",
             "1 teaspoon sesame oil",
-            "1/2 teaspoon minced garlic"
+            "½ teaspoon minced garlic"
         ],
         "For the Vegetables": [
             "1 bunch spinach, about 8 ounces",
             "1 teaspoon sesame oil",
             "salt to taste - about 1/4 teaspoon",
-            "2 medium carrots, julienned (or 1/2-inch thick long strips)",
-            "4 strips pre-cut pickled radish (danmuji, 단무지) strips, white or yellow if not pre-cut, cut into about 1/2-inch thick long strips",
+            "2 medium carrots, julienned (or ½-inch thick long strips)",
+            "4 strips pre-cut pickled radish (danmuji, 단무지) strips, white or yellow if not pre-cut, cut into about ½-inch thick long strips",
             "4 strips prepared burdock roots (ueong, 우엉) Or make braised burdock roots"
         ],
         "For the Egg": [
@@ -208,32 +208,32 @@ INGREDIENTS = {
         "For the Fish Cake": [
             "1 or 2 (if small) sheets fish cake - eomuk (어묵)",
             "1 teaspoon soy sauce",
-            "1/2 teaspoon sugar",
-            "1/2 teaspoon sesame oil"
+            "½ teaspoon sugar",
+            "½ teaspoon sesame oil"
         ]
-},
+    },
     "Omurice": {
         "Main Ingredients": [
-            "1/2 medium onion finely chopped",
+            "½ medium onion finely chopped",
             "1 scallion finely chopped",
             "1 small carrot finely chopped",
             "4 ounces beef or pork, chicken or shrimp, ground or finely chopped",
             "1 tablespoon soy sauce",
-            "1-1/2 tablespoon ketchup adjust to taste, and more for decoration",
+            "1 ½ tablespoon ketchup adjust to taste, and more for decoration",
             "salt and pepper",
             "Oil for pan frying",
             "2 servings of cooked rice",
             "4 eggs"
         ]
-},
+    },
     "Pajun": {
         "Main Ingredients": [
             "2 cups all-purpose flour",
             "2 large eggs, beaten",
             "1 teaspoon kosher salt",
             "1 bunch scallions, green and white parts; halved lengthwise and cut into 2- to 3-inch lengths",
-            "1 1/2 cups water",
-            "1 1/2 tablespoons vegetable oil, for frying",
+            "1 ½ cups water",
+            "1 ½ tablespoons vegetable oil, for frying",
             "Soy sauce, or spicy dipping sauce, for serving"
         ]
     },
@@ -261,9 +261,58 @@ INGREDIENTS = {
             "1 jalapeño pepper, diced, or to taste (Optional)",
             "2 limes, cut into wedges, or as needed"
         ]
-},
-
-
+    },
+    "Spicy ramen": {
+        "Main Ingredients": [
+            "2 Beef Steaks, cubed",
+            "Salt and Pepper",
+            "2 tsp. Sesame Oil",
+            "3 tbsp. Kimchee Base or Gochujang Sauce",
+            "2 tbsp. Soy Sauce",
+            "¼ cup Scallions, chopped",
+            "1 ½ Cups Water",
+            "1 Package Instant Ramen noodles",
+            "Black sesame seeds"
+        ]
+    },
+    "Tilapia & baked vegetables": {
+        "Main Ingredients": [
+            "Frozen tilapia",
+            "Mixed vegetables of your choice"
+            "2 Tbsp olive oil",
+            "1 ½ tsp Italian seasoning",
+            "2 - 3 cloves garlic, minced",
+            "Salt and freshly ground black pepper",
+            "1 cup grape tomatoes (optional)",
+            "1 Tbsp fresh lemon juice"
+        ]
+    },
+    "Tofu jorim": {
+        "Main Ingredients": [
+            "1 about 18-oz pack firm tofu",
+            "1 tablespoon vegetable/canola oil"
+        ],
+        "For the Sauce": [
+            "3 tablespoons soy sauce",
+            "3 tablespoons water",
+            "1 tablespoon sesame oil",
+            "1 teaspoon sugar",
+            "1 teaspoon Korean red pepper flakes (gochugaru)",
+            "1 teaspoon sesame seed",
+            "1 teaspoon minced garlic",
+            "2 scallions (1 if large), finely chopped about 1/4 cup"
+        ]
+    },
+    "Yangchun Noodles": {
+        "Main Ingredients": [
+            "100 g noodles",
+            "1 tbsp. soy sauce, or to taste",
+            "1 tsp. home rendered lard, or ½ teaspoon sesame oil",
+            "1/4 tsp. sugar",
+            "1 green onion, finely chopped",
+            "2 cups Light chicken stock, or liquid for cooking the noodles as needed"
+        ]
+    }
 
 }
 
