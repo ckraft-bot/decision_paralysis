@@ -16,10 +16,13 @@ def main():
             'grocery shop', 
             'mop',
             'mow the lawn', 
-            'scoope the litter', 
+            'scoop the litter', 
+            'trim cat nails',
             'vacuum',
             'wash car',
-            'water plants']  
+            'water plants',
+
+            ]  
     
     leisure = ['call a family', 
             'call a friend', 
