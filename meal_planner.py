@@ -2,13 +2,8 @@ import config
 import os
 import pandas as pd
 import random
-
-# Gmail API dependencies
-import email
 import smtplib
 import ssl
-from email import encoders
-from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -17,31 +12,12 @@ SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
 SUBJECT = "Weekly Meal Plan"
 
-# Meal options
 COOK_OPTIONS = [
-    'Bibimbab', 
-    'Buddha bowl', 
-    'Eggplant parmesan', 
-    'Fruit smoothie', 
-    'Gyeran mari', 
-    'Japchae', 
-    'Kimchi jjigae', 
-    'Kimchi fried rice', 
-    'Kimbap bowl', 
-    'Mandoo', 
-    'Omurice', 
-    'Pad woon sen', 
-    'Pajun', 
-    'Ramen', 
-    'Rice & seaweed', 
-    'Shrimp tacos', 
-    'Spicy ramen', 
-    'Tilapia & baked vegetables', 
-    'Tofu jorim', 
-    'Tomato and egg',
-    'Yangchun noodles'
+    'Bibimbab', 'Buddha bowl', 'Eggplant parmesan', 'Fruit smoothie', 'Gyeran mari',
+    'Japchae', 'Kimchi jjigae', 'Kimchi fried rice', 'Kimbap bowl', 'Mandoo', 'Omurice',
+    'Pad woon sen', 'Pajun', 'Ramen', 'Rice & seaweed', 'Shrimp tacos', 'Spicy ramen',
+    'Tilapia & baked vegetables', 'Tofu jorim', 'Tomato and egg', 'Yangchun noodles'
 ]
-
 
 # Ingredients list
 INGREDIENTS = {
@@ -313,101 +289,87 @@ INGREDIENTS = {
             "2 cups Light chicken stock, or liquid for cooking the noodles as needed"
         ]
     }
-
 }
 
-
-
 ORDER_OUT_OPTIONS = [
-    'Order out Korean', 'Order out Japanese', 'Order out Thai', 
-    'Order out Chinese', 'Order out Mexican', 'Order out Italian', 
-    'Order out Fast food'
+    'Order out Korean', 'Order out Japanese', 'Order out Thai', 'Order out Chinese',
+    'Order out Mexican', 'Order out Italian', 'Order out Fast food'
 ]
 
 DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-# def generate_meal_plan():
-#     """Generate a weekly meal plan."""
-#     order_out_day = random.choice(DAYS_OF_WEEK)
-#     meal_plan = {
-#         day: random.choice(ORDER_OUT_OPTIONS) if day == order_out_day else random.choice(COOK_OPTIONS)
-#         for day in DAYS_OF_WEEK
-#     }
-#     return pd.DataFrame(meal_plan.values(), index=meal_plan.keys(), columns=['Meal']).T
+
+def format_ingredients(ingredients):
+    """Format ingredients as bullet points."""
+    if isinstance(ingredients, dict):
+        return "\n\n".join([f"**{key}**:\n" + "\n".join([f"- {item}" for item in value]) for key, value in ingredients.items()])
+    return ingredients
+
 
 def generate_meal_plan():
-    """Generate a weekly meal plan."""
+    """Generate a weekly meal plan with meals and corresponding ingredients."""
     order_out_day = random.choice(DAYS_OF_WEEK)
     meal_plan = {
         day: random.choice(ORDER_OUT_OPTIONS) if day == order_out_day else random.choice(COOK_OPTIONS)
         for day in DAYS_OF_WEEK
     }
+    
     meal_plan_with_ingredients = {
         day: {
             "Meal": meal,
-            "Ingredients": INGREDIENTS.get(meal, "Order out or ingredients not available")
+            "Ingredients": format_ingredients(INGREDIENTS.get(meal, "Order out or ingredients not available"))
         }
         for day, meal in meal_plan.items()
     }
-    return pd.DataFrame(meal_plan_with_ingredients).T
 
-# Generate the meal plan
-meal_plan_df = generate_meal_plan()
-print(meal_plan_df)
+    meal_plan_df = pd.DataFrame(meal_plan_with_ingredients).T
+    return "\n\n".join(
+        f"{day}:\nMeal: {row['Meal']}\nIngredients:\n{row['Ingredients']}"
+        for day, row in meal_plan_df.iterrows()
+    )
 
 
-def send_email(meal_df):
+def send_email(meal_plan):
     """Send the meal plan via email."""
     sender_email = config.EMAIL_USERNAME
     password = config.EMAIL_PASSWORD
 
     if not sender_email or not password:
         raise ValueError("Email credentials not found. Ensure they are set in the .env file.")
-
+    
     receiver_email = sender_email
-    meal_html = meal_df.to_html(index=False, border=0)
     body = f"""
     <html>
         <body>
             <p>Here is your weekly meal plan:</p>
-            {meal_html}
+            <pre>{meal_plan}</pre>
         </body>
     </html>
     """
 
-    # Set up the MIME message
+    # Compose email
     msg = MIMEMultipart('alternative')
     msg['From'] = sender_email
     msg['To'] = receiver_email
     msg['Subject'] = SUBJECT
     msg.attach(MIMEText(body, 'html'))
 
-    # Create a secure SSL context
-    context = ssl.create_default_context()
-
     # Send the email
     try:
-        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
+        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=ssl.create_default_context()) as server:
             server.login(sender_email, password)
             server.sendmail(sender_email, receiver_email, msg.as_string())
         print(f"Email sent to {receiver_email}")
     except smtplib.SMTPException as e:
         print(f"Failed to send email: {e}")
-    
-def main():
-    """Main function to generate meal plan and send email."""
-    meal_plan_df = generate_meal_plan()
-    print(meal_plan_df)
-    send_email(meal_plan_df)
 
-    # Convert DataFrame to markdown format
-    # markdown_content = meal_plan_df.to_markdown(index=False)
-    
-    # # Save the markdown to a file
-    # # with open('weekly_meal_plan_export.txt', 'w') as file:
-    # #     file.write(markdown_content)
-    
-    # # print("Markdown file 'weekly_meal_plan.md' has been saved.")
+
+def main():
+    """Main function to generate the meal plan and send it via email."""
+    meal_plan_output = generate_meal_plan()
+    # print(meal_plan_output)  # Optionally print to console for debugging
+    send_email(meal_plan_output)
+
 
 if __name__ == "__main__":
     main()
