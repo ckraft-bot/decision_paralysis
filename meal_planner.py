@@ -326,6 +326,15 @@ ORDER_OUT_OPTIONS = [
 
 DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
+# def generate_meal_plan():
+#     """Generate a weekly meal plan."""
+#     order_out_day = random.choice(DAYS_OF_WEEK)
+#     meal_plan = {
+#         day: random.choice(ORDER_OUT_OPTIONS) if day == order_out_day else random.choice(COOK_OPTIONS)
+#         for day in DAYS_OF_WEEK
+#     }
+#     return pd.DataFrame(meal_plan.values(), index=meal_plan.keys(), columns=['Meal']).T
+
 def generate_meal_plan():
     """Generate a weekly meal plan."""
     order_out_day = random.choice(DAYS_OF_WEEK)
@@ -333,7 +342,19 @@ def generate_meal_plan():
         day: random.choice(ORDER_OUT_OPTIONS) if day == order_out_day else random.choice(COOK_OPTIONS)
         for day in DAYS_OF_WEEK
     }
-    return pd.DataFrame(meal_plan.values(), index=meal_plan.keys(), columns=['Meal']).T
+    meal_plan_with_ingredients = {
+        day: {
+            "Meal": meal,
+            "Ingredients": INGREDIENTS.get(meal, "Order out or ingredients not available")
+        }
+        for day, meal in meal_plan.items()
+    }
+    return pd.DataFrame(meal_plan_with_ingredients).T
+
+# Generate the meal plan
+meal_plan_df = generate_meal_plan()
+print(meal_plan_df)
+
 
 def send_email(meal_df):
     """Send the meal plan via email."""
@@ -375,18 +396,18 @@ def send_email(meal_df):
     
 def main():
     """Main function to generate meal plan and send email."""
-    meal_df = generate_meal_plan()
-    print(meal_df)
-    send_email(meal_df)
+    meal_plan_df = generate_meal_plan()
+    print(meal_plan_df)
+    send_email(meal_plan_df)
 
     # Convert DataFrame to markdown format
-    markdown_content = meal_df.to_markdown(index=False)
+    # markdown_content = meal_plan_df.to_markdown(index=False)
     
-    # Save the markdown to a file
-    # with open('weekly_meal_plan_export.txt', 'w') as file:
-    #     file.write(markdown_content)
+    # # Save the markdown to a file
+    # # with open('weekly_meal_plan_export.txt', 'w') as file:
+    # #     file.write(markdown_content)
     
-    # print("Markdown file 'weekly_meal_plan.md' has been saved.")
+    # # print("Markdown file 'weekly_meal_plan.md' has been saved.")
 
 if __name__ == "__main__":
     main()
