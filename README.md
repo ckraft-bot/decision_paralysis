@@ -12,6 +12,10 @@ See the plan in the csv file
 
 ![The output content](meal_planner_export.PNG)
 
+Alternatively you can get the meal plan straight to your inbox _along with the ingredients to eliminate the task of creating a shopping list_
+
+![The output content](meal_planner_email.png)
+
 __Requirements__
   
 - Python 3.10.8
