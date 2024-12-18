@@ -6,15 +6,15 @@ This Python script generates a meal plan for the week by randomly selecting a me
 
 Save as csv file with timestamp:
 
-![The output](meal_planner_export.png)
+![The output](Outputs/Images/meal_planner_export.png)
 
 See the plan in the csv file:
 
-![The output content](meal_planner_table.png)
+![The output content](Outputs/Images/meal_planner_table.png)
 
 Alternatively you can get the meal plan straight to your inbox _along with the ingredients to eliminate the task of creating a shopping list_.
 
-![The output content](meal_planner_email.png)
+![The output content](Outputs/Images/meal_planner_email.png)
 
 __Requirements__
   
@@ -30,10 +30,10 @@ You can modify the meal options or add new ones as per your preference. Just edi
 This Python script generates a weekend itinerary consisting of activities for Friday, Saturday, and Sunday. The activities are categorized into exercise, chore, and leisure. The script randomly selects one exercise activity, two chore activities, and two leisure activities for each day and combines them into a full itinerary.  
 
 You can get that either in your windows notification center as a pop up...
-![noptification center](weekend_planner_windows_popup.png)
+![noptification center](Outputs/Images/weekend_planner_whatsapp.png)
 
 or get a text message or an email.
-![whatsapp message](weekend_planner_whatsapp.png)
+![whatsapp message](Outputs/Images/weekend_planner_windows_popup.PNG)
 
 __Requirements__ 
   
