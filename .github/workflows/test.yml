@@ -1,12 +1,14 @@
-# This is a basic workflow to trigger to meal planner generation
+# This is a basic workflow to trigger unit testing
 name:
-  Meal Planner Job
+  Test before PR
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow 3 am every Saturdyy
-  schedule:
-    - cron: "0 3 * * 6" #"*/5 * * * *" = every 5 mins
+  # Triggers the workflow when a PR is detected
+  pull_request:
+    branches: 
+        - main
+
 
 jobs:
   # This workflow contains a single job called "cron"

@@ -30,7 +30,7 @@ You can modify the meal options or add new ones as per your preference. Just edi
 This Python script generates a weekend itinerary consisting of activities for Friday, Saturday, and Sunday. The activities are categorized into exercise, chore, and leisure. The script randomly selects one exercise activity, two chore activities, and two leisure activities for each day and combines them into a full itinerary.  
 
 You can get that either in your windows notification center as a pop up...
-![noptification center](weekend_planner_windows_popup.PNG)
+![noptification center](weekend_planner_windows_popup.png)
 
 or get a text message or an email.
 ![whatsapp message](weekend_planner_whatsapp.png)

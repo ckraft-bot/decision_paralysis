@@ -1,4 +1,5 @@
-import config
+# import config
+from dotenv import dotenv_values
 import os
 import random
 import smtplib
@@ -9,7 +10,7 @@ from email.mime.text import MIMEText
 # Constants
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
-SUBJECT = "Weekend plan"
+SUBJECT = "Weekend Plan"
 
 DAY_LIST = ['Friday', 'Saturday', 'Sunday']
 
@@ -71,8 +72,9 @@ def send_email(itinerary):
     """
     Sends the composed email with the itinerary to the user.
     """
-    sender_email = config.EMAIL_USERNAME
-    password = config.EMAIL_PASSWORD
+    secrets = dotenv_values(".env")
+    sender_email = secrets["EMAIL_USERNAME"]
+    password = secrets["EMAIL_PASSWORD"]
 
     if not sender_email or not password:
         raise ValueError("Email credentials not found. Ensure they are set in the .env file.")
