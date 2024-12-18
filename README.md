@@ -18,7 +18,7 @@ Alternatively you can get the meal plan straight to your inbox _along with the i
 
 __Requirements__
   
-- Python 3.10.8
+- Python Python 3.11.8
   
 __Customization__
   
@@ -37,7 +37,7 @@ or get a text message or an email.
 
 __Requirements__ 
   
-- Python 3.10.8
+- Python Python 3.11.8
 - `win10toast==0.9`
 - `pywhatkit==5.4`
   
