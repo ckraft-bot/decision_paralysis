@@ -24,6 +24,10 @@ jobs:
       run: |
         ls -al
 
+    - name: Debugging path issues (recursive)
+      run: |
+        ls -alR
+
     - name: Run unit tests
       run: |
         python hello_world.py 
