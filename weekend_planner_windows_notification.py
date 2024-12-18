@@ -3,7 +3,7 @@ from win10toast import ToastNotifier
 
 def main():  
     # Define the activities and days    
-    exercise = ['climb'
+    exercise = ['climb',
                 'hike',
                 'paddle board',
                 'rock climb',
