@@ -26,4 +26,4 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run tests
-      run: python C:\Users\Clair\OneDrive\Documents\GitHub\decision_paralysis\decision_paralysis\hello_world.py
+      run: python run: python decision_paralysis/hello_world.py
