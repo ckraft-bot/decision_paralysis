@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 # Constants
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
-SUBJECT = "Weekend plan"
+SUBJECT = "Weekend Plan"
 
 DAY_LIST = ['Friday', 'Saturday', 'Sunday']
 
