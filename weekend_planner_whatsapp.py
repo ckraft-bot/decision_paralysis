@@ -1,4 +1,5 @@
-import config
+# import config
+from dotenv import dotenv_values
 import os
 import random
 import pywhatkit
@@ -51,7 +52,8 @@ def send_message(itinerary):
     """
     Sends the composed WhatsApp message with the itinerary to the user.
     """
-    phone = config.PHONE_NUMBER  # Assumes the phone number is set in the config file
+    secrets = dotenv_values(".env")
+    phone = secrets["PHONE_NUMBER"]
     message = itinerary
     pywhatkit.sendwhatmsg_instantly(phone, message, 10)  # Sends the message with a 10-second delay
 

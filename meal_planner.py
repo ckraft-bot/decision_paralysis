@@ -1,5 +1,6 @@
-import config
-import os
+# import config
+from dotenv import dotenv_values
+# import os
 import pandas as pd
 import random
 import smtplib
@@ -331,8 +332,9 @@ def generate_meal_plan():
 
 def send_email(meal_plan):
     """Send the meal plan via email."""
-    sender_email = config.EMAIL_USERNAME
-    password = config.EMAIL_PASSWORD
+    secrets = dotenv_values(".env")
+    sender_email = secrets["EMAIL_USERNAME"]
+    password = secrets["EMAIL_PASSWORD"]
 
     if not sender_email or not password:
         raise ValueError("Email credentials not found. Ensure they are set in the .env file.")
