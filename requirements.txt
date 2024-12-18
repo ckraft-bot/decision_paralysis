@@ -1,3 +1,0 @@
-pandas==2.2.1
-pywhatkit==5.4
-win10toast==0.9
