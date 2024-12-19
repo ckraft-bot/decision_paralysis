@@ -22,7 +22,7 @@ __Requirements__
   
 __Customization__
   
-You can modify the meal options or add new ones as per your preference. Just edit the `meal_option` list in the script to include your desired activities.  
+You can modify the meal options or add new ones as per your preference. Just edit the `meal_option` list in the script to include your desired meals.  
 
   
 ## Weekend Planner
