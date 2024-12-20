@@ -1,20 +1,18 @@
-# This is a basic workflow to trigger to meal planner generation
-name:
-  Meal Planner Job
+name: Meal Planner Job
 
 # Controls when the workflow will run
 on:
   pull_request:
     branches:
       - main
-  
-  # # Triggers the workflow 3 am every Saturdyy
+
+  # Triggers the workflow 3 am every Saturday
   # schedule:
-  #   - cron: "0 3 * * 6" 
+  #   - cron: "0 3 * * 6"
 
 env:
-  prod: ${{ secrets.EMAIL_PASSWORD }}
-  prod: ${{ secrets.EMAIL_USERNAME }}
+  EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+  EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
 
 jobs:
   test:

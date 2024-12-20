@@ -332,12 +332,15 @@ def generate_meal_plan():
 
 def send_email(meal_plan):
     """Send the meal plan via email."""
+    import os
+
+    # Fetch the credentials from environment variables
     EMAIL_USERNAME = os.environ.get("EMAIL_USERNAME")
-    EMAIL_PASSWORD = os.environ.get("EMAIL_EMAIL_PASSWORD")
+    EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 
     if not EMAIL_USERNAME or not EMAIL_PASSWORD:
-        raise ValueError("Email credentials not found. Ensure they are set in the .env file.")
-    
+        raise ValueError("Email credentials not found. Ensure they are set properly in GitHub Actions.")
+
     receiver_email = EMAIL_USERNAME
     body = f"""
     <html>
