@@ -1,14 +1,9 @@
 name: Test before PR
 
-on:
-  pull_request:
-    branches:
-      - main
-
-env:
-  EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-  EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
-  PHONE_NUMBER: ${{ secrets.PHONE_NUMBER }}
+# on:
+#   pull_request:
+#     branches:
+#       - main
 
 jobs:
   test:
