@@ -13,8 +13,8 @@ on:
   #   - cron: "0 3 * * 6" 
 
 env:
-  EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-  EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+  prod: ${{ secrets.EMAIL_PASSWORD }}
+  prod: ${{ secrets.EMAIL_USERNAME }}
 
 jobs:
   test:
