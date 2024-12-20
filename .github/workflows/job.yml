@@ -11,8 +11,8 @@ on:
   #   - cron: "0 3 * * 6"
 
 env:
-  EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-  EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+  email_password: ${{ secrets.EMAIL_PASSWORD }} # env_var: secrets.REPO_SECRETS
+  email_username: ${{ secrets.EMAIL_USERNAME }} # env_var: secrets.REPO_SECRETS
 
 jobs:
   test:

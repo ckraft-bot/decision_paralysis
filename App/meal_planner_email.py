@@ -1,5 +1,5 @@
 # import config
-# from dotenv import dotenv_values
+# from dotenv import load_dotenv
 import os
 import pandas as pd
 import random
@@ -332,11 +332,9 @@ def generate_meal_plan():
 
 def send_email(meal_plan):
     """Send the meal plan via email."""
-    import os
-
     # Fetch the credentials from environment variables
-    EMAIL_USERNAME = os.environ.get("EMAIL_USERNAME")
-    EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+    EMAIL_USERNAME = os.environ['email_username'] # [should match yaml def]
+    EMAIL_PASSWORD = os.environ['email_password'] # [should match yaml def]
 
     if not EMAIL_USERNAME or not EMAIL_PASSWORD:
         raise ValueError("Email credentials not found. Ensure they are set properly in GitHub Actions.")
