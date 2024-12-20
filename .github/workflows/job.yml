@@ -4,18 +4,39 @@ name:
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow 3 am every Saturdyy
-  schedule:
-    - cron: "0 3 * * 6" #"*/5 * * * *" = every 5 mins
+  pull_request:
+    branches:
+      - main
+  # # Triggers the workflow 3 am every Saturdyy
+  # schedule:
+  #   - cron: "0 3 * * 6" 
+
+env:
+  EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+  EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
 
 jobs:
-  # This workflow contains a single job called "cron"
-  cron:
-    # The type of runner that the job will run on
+  test:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+    - name: Checkout code
+      uses: actions/checkout@v3  # Ensure code is checked out
+
+    - name: Set up Python
+      uses: actions/setup-python@v4  # Use the latest version of setup-python
+      with:
+        python-version: '3.10.16'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
+    - name: List files in the repository (recursive)
+      run: |
+        ls -alR  # Lists all files to check the directory structure
+
+    - name: Run unit tests
+      run: |
+        python App/meal_planner_email.py # If the file is in the root directory
