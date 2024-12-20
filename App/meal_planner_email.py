@@ -332,13 +332,13 @@ def generate_meal_plan():
 
 def send_email(meal_plan):
     """Send the meal plan via email."""
-    sender_email = os.getenv("EMAIL_USERNAME")
-    password = os.getenv("EMAIL_PASSWORD")
+    EMAIL_USERNAME = os.environ.get("EMAIL_USERNAME")
+    EMAIL_PASSWORD = os.environ.get("EMAIL_EMAIL_PASSWORD")
 
-    if not sender_email or not password:
+    if not EMAIL_USERNAME or not EMAIL_PASSWORD:
         raise ValueError("Email credentials not found. Ensure they are set in the .env file.")
     
-    receiver_email = sender_email
+    receiver_email = EMAIL_USERNAME
     body = f"""
     <html>
         <body>
@@ -350,7 +350,7 @@ def send_email(meal_plan):
 
     # Compose email
     msg = MIMEMultipart('alternative')
-    msg['From'] = sender_email
+    msg['From'] = EMAIL_USERNAME
     msg['To'] = receiver_email
     msg['Subject'] = SUBJECT
     msg.attach(MIMEText(body, 'html'))
@@ -358,8 +358,8 @@ def send_email(meal_plan):
     # Send the email
     try:
         with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=ssl.create_default_context()) as server:
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, msg.as_string())
+            server.login(EMAIL_USERNAME, EMAIL_PASSWORD)
+            server.sendmail(EMAIL_USERNAME, receiver_email, msg.as_string())
         print(f"Email sent to {receiver_email}")
     except smtplib.SMTPException as e:
         print(f"Failed to send email: {e}")

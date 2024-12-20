@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  
   # # Triggers the workflow 3 am every Saturdyy
   # schedule:
   #   - cron: "0 3 * * 6" 
