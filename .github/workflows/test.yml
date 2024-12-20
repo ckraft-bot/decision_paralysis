@@ -15,8 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v3  # Ensure code is checked out
+
     - name: Set up Python
-      uses: actions/setup-python@v4  # Use the latest stable version
+      uses: actions/setup-python@v4  # Use the latest version of setup-python
       with:
         python-version: '3.11.11'
 
@@ -25,14 +28,10 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     
-    - name: List files in current directory
+    - name: List files in the repository (recursive)
       run: |
-        ls -al
-
-    - name: Debugging path issues (recursive)
-      run: |
-        ls -alR
+        ls -alR  # Lists all files to check the directory structure
 
     - name: Run unit tests
       run: |
-        python hello_world.py
+        python hello_world.py  # If the file is in the root directory
