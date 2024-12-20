@@ -2,13 +2,14 @@ name: Meal Planner Job
 
 # Controls when the workflow will run
 on:
-  pull_request:
-    branches:
-      - main
+  # Triggers the workflow on PRs
+  # pull_request:
+  #   branches:
+  #     - main
 
   # Triggers the workflow 3 am every Saturday
-  # schedule:
-  #   - cron: "0 3 * * 6"
+  schedule:
+    - cron: "0 3 * * 6"
 
 env:
   email_password: ${{ secrets.EMAIL_PASSWORD }} # env_var: secrets.REPO_SECRETS
@@ -36,6 +37,6 @@ jobs:
       run: |
         ls -alR  # Lists all files to check the directory structure
 
-    - name: Run unit tests
+    - name: Run app
       run: |
-        python App/meal_planner_email.py # If the file is in the root directory
+        python App/meal_planner_email.py 

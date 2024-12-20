@@ -72,9 +72,9 @@ def send_email(itinerary):
     """
     Sends the composed email with the itinerary to the user.
     """
-    secrets = dotenv_values(".env")
-    sender_email = secrets["EMAIL_USERNAME"]
-    password = secrets["EMAIL_PASSWORD"]
+    # Fetch the credentials from environment variables
+    EMAIL_USERNAME = os.environ['email_username'] # [should match yaml def]
+    EMAIL_PASSWORD = os.environ['email_password'] # [should match yaml def]
 
     if not sender_email or not password:
         raise ValueError("Email credentials not found. Ensure they are set in the .env file.")
