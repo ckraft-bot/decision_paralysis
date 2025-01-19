@@ -14,11 +14,31 @@ SMTP_PORT = 465
 SUBJECT = "Weekly Meal Plan"
 
 COOK_OPTIONS = [
-    'Bibimbab', 'Buddha bowl', 'Eggplant parmesan', 'Fruit smoothie', 'Gyeran mari',
-    'Japchae', 'Kimchi jjigae', 'Kimchi fried rice', 'Kimbap bowl', 'Mandoo', 'Omurice',
-    'Pad woon sen', 'Pajun', 'Ramen', 'Rice & seaweed', 'Shrimp tacos', 'Spicy ramen',
-    'Tilapia & baked vegetables', 'Tofu jorim', 'Tomato and egg', 'Yangchun noodles'
+    'Bibimbab',
+    'Buddha bowl',
+    'Eggplant parmesan',
+    'Fruit smoothie',
+    'Gamja Bokkeum',
+    'Gyeran mari',
+    'Japchae',
+    'Kimchi jjigae',
+    'Kimchi fried rice',
+    'Kimbap bowl',
+    'Mandoo',
+    'Omurice',
+    'Pad woon sen',
+    'Pajun',
+    'Ramen',
+    'Rice & seaweed',
+    'Shrimp tacos',
+    'Spicy ramen',
+    'Tilapia & baked vegetables',
+    'Tofu jorim',
+    'Tomato and egg',
+    'Yangzhou fried rice',
+    'Yangchun noodles',
 ]
+
 
 # Ingredients list
 INGREDIENTS = {
@@ -92,6 +112,19 @@ INGREDIENTS = {
             "½ teaspoon dried basil"
         ]
     },
+    "Gamja Bokkeum": {
+        "Main Ingredients": [
+            "2 medium Yukon potatoes or 1 large russet potato",
+            "1 tbsp oil",
+            "1 clove garlic, minced",
+            "½ small onion, thinly sliced",
+            "½ small carrot, thinly sliced",
+            "2 green onions, thinly sliced",
+            "Salt to taste",
+            "Pepper to taste",
+            "2 tsp toasted sesame seeds"
+        ]
+    },
     "Gyeran mari": {
         "Main Ingredients": [
             "4 - 5 large eggs",
@@ -116,7 +149,7 @@ INGREDIENTS = {
             "egg garnish (jidan) - optional"
         ],
         "Sauce": [
-            "3.5 tablespoons soy sauce",
+            "3 ½ tablespoons soy sauce",
             "3 tablespoons sugar (or brown sugar, you can use a little less if you want)",
             "2 tablespoons sesame oil",
             "2 teaspoons minced garlic",
@@ -255,7 +288,7 @@ INGREDIENTS = {
     "Tilapia & baked vegetables": {
         "Main Ingredients": [
             "Frozen tilapia",
-            "Mixed vegetables of your choice"
+            "Mixed vegetables of your choice",
             "2 Tbsp olive oil",
             "1 ½ tsp Italian seasoning",
             "2 - 3 cloves garlic, minced",
@@ -280,7 +313,22 @@ INGREDIENTS = {
             "2 scallions (1 if large), finely chopped about 1/4 cup"
         ]
     },
-    "Yangchun Noodles": {
+    "Yangzhou fried rice": {
+        "Main Ingredients": [
+            "5 cups cooked white rice (about 2 cups uncooked; preferably made the day before and refrigerated)",
+            "3 tablespoons cooking oil",
+            "2 carrots (diced)",
+            "1/3 cup peas (frozen or fresh)",
+            "10 shrimp (deveined, deshelled, no tail; cut into small pieces)",
+            "3 eggs",
+            "½ cup char siu pork (or Chinese sausage; cut into small pieces)",
+            "2 scallions (chopped)",
+            "1 ½ tablespoons soy sauce",
+            "Pepper (to taste)",
+            "Salt (to taste)"
+        ]
+    },
+    "Yangchun noodles": {
         "Main Ingredients": [
             "100 g noodles",
             "1 tbsp. soy sauce, or to taste",
@@ -289,12 +337,20 @@ INGREDIENTS = {
             "1 green onion, finely chopped",
             "2 cups Light chicken stock, or liquid for cooking the noodles as needed"
         ]
-    }
+    },
+
+
 }
 
 ORDER_OUT_OPTIONS = [
-    'Order out Korean', 'Order out Japanese', 'Order out Thai', 'Order out Chinese',
-    'Order out Mexican', 'Order out Italian', 'Order out Fast food'
+    'Order out Chinese',
+    'Order out Fast food',
+    'Order out Indian',
+    'Order out Italian',
+    'Order out Japanese',
+    'Order out Korean',
+    'Order out Mexican',
+    'Order out Thai',
 ]
 
 DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
