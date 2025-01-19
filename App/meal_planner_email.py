@@ -343,8 +343,14 @@ INGREDIENTS = {
 }
 
 ORDER_OUT_OPTIONS = [
-    'Order out Korean', 'Order out Japanese', 'Order out Thai', 'Order out Chinese',
-    'Order out Mexican', 'Order out Italian', 'Order out Fast food'
+    'Order out Chinese',
+    'Order out Fast food',
+    'Order out Indian',
+    'Order out Italian',
+    'Order out Japanese',
+    'Order out Korean',
+    'Order out Mexican',
+    'Order out Thai',
 ]
 
 DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
