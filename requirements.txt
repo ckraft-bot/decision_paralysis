@@ -1,3 +1,4 @@
 pandas==2.2.1
 pywhatkit==5.4
 # win10toast==0.9 # trips up at unit testing
+# pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
