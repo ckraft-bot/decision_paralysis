@@ -67,7 +67,7 @@ def main():
 
         # Call the Calendar API
         now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
-        print("Getting the upcoming 10 events")
+        print("Getting the upcoming events")
         events_result = (
             service.events()
             .list(
