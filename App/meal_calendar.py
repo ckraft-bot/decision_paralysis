@@ -55,6 +55,7 @@ def main():
             "summary": "Women's Basketball vs. Duke",
             "location": "McCamish Pavilion",
             "description": "GA Tech is hosting this game. The women's basketball season schedule can be found here: https://ramblinwreck.com/sports/w-baskbl/schedule/. Go Jackets!",
+            "colorId": 3, # #4285f4 cobalt
             "start": {
                 "dateTime": "2025-01-26T14:00:00-05:00",
                 "timeZone": "America/New_York"
