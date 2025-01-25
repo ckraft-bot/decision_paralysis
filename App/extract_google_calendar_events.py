@@ -35,7 +35,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/calendar"]
+SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 def main():
     """Shows basic usage of the Google Calendar API.
@@ -63,34 +63,30 @@ def main():
     try:
         service = build("calendar", "v3", credentials=creds)
 
-        event = {
-            "summary": "Women's Basketball vs. Duke",
-            "location": "McCamish Pavilion",
-            "description": "GA Tech is hosting this game. The women's basketball season schedule can be found here: https://ramblinwreck.com/sports/w-baskbl/schedule/. Go Jackets!",
-            "start": {
-                "dateTime": "2025-01-26T14:00:00-05:00",
-                "timeZone": "America/New_York"
-            },
-            "end": {
-                "dateTime": "2025-01-26T16:00:00-05:00",
-                "timeZone": "America/New_York"
-            },
-            "recurrence": [],
-            "attendees": [
-                {"email": "ckraft@gatech.edu"},
-                {"email": "thekrafts@gmail.com"}
-            ],
-            "reminders": {
-                "useDefault": False,
-                "overrides": [
-                    {"method": "email", "minutes": 1440},
-                    {"method": "popup", "minutes": 10}
-                ]
-            }
-        }
+        # Call the Calendar API
+        now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
+        print("Getting the upcoming events")
+        events_result = (
+            service.events()
+            .list(
+                calendarId="primary",
+                timeMin=now,
+                maxResults=10,
+                singleEvents=True,
+                orderBy="startTime",
+            )
+            .execute()
+        )
+        events = events_result.get("items", [])
 
-        event = service.events().insert(calendarId='primary', body=event).execute()
-        print('Event created: %s' % (event.get('htmlLink')))
+        if not events:
+            print("No upcoming events found.")
+            return
+
+        # Prints the start and name of the next 10 events
+        for event in events:
+            start = event["start"].get("dateTime", event["start"].get("date"))
+            print(start, event["summary"])
 
     except HttpError as error:
         print(f"An error occurred: {error}")
