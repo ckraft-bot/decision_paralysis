@@ -1,18 +1,3 @@
-# Copyright 2018 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# [START calendar_quickstart]
 import datetime
 import os.path
 
@@ -41,9 +26,10 @@ def main():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-            "credentials.json", SCOPES
-        )
-        creds = flow.run_local_server(port=0)
+                "credentials.json", SCOPES
+            )
+            # Replacing the previous line with the one specifying port 8081
+            creds = flow.run_local_server(port=8081)  # Explicitly using port 8081
         # Save the credentials for the next run
         with open("token.json", "w") as token:
             token.write(creds.to_json())
@@ -82,4 +68,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-# [END calendar_quickstart]
