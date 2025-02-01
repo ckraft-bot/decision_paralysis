@@ -1,6 +1,5 @@
 import datetime
 import os.path
-
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -28,8 +27,7 @@ def main():
             flow = InstalledAppFlow.from_client_secrets_file(
                 "credentials.json", SCOPES
             )
-            # Replacing the previous line with the one specifying port 8081
-            creds = flow.run_local_server(port=8081)  # Explicitly using port 8081
+            creds = flow.run_local_server(port=8081)  # Use a fixed port 8081
         # Save the credentials for the next run
         with open("token.json", "w") as token:
             token.write(creds.to_json())
