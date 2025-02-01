@@ -1,3 +1,7 @@
 pandas==2.2.1
 pywhatkit==5.4
 # win10toast==0.9 # trips up at unit testing
+google-api-python-client==2.160.0
+google-auth==2.28.2
+google-auth-httplib2==0.2.0
+google-auth-oauthlib==1.2.1
