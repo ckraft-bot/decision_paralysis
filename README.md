@@ -1,4 +1,4 @@
-# DecisionParalysis
+# Decision Paralysis
 
 ## Meal Planner
   
