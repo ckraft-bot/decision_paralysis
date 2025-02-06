@@ -5,8 +5,13 @@ import pandas as pd
 import random
 import smtplib
 import ssl
+import mimetypes
+from email import encoders
+from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from ics import Calendar, Event
+from datetime import datetime, timedelta
 
 # Constants
 SMTP_SERVER = "smtp.gmail.com"
@@ -16,7 +21,7 @@ SUBJECT = "Weekly Meal Plan"
 COOK_OPTIONS = [
     'Bibimbab',
     'Buddha bowl',
-    # 'Eggplant parmesan',
+    #'Eggplant parmesan',  # too long of a prep time
     'Fruit smoothie',
     'Gamja Bokkeum',
     'Gyeran mari',
@@ -38,8 +43,6 @@ COOK_OPTIONS = [
     'Yangchun noodles',
 ]
 
-
-# Ingredients list
 INGREDIENTS = {
     "Bibimbab": {
         "Rice": [
@@ -98,17 +101,6 @@ INGREDIENTS = {
             "2 tablespoons corn starch",
             "2 tablespoons gluten free plain breadcrumbs or regular",
             "½ cup peanut sauce"
-        ]
-    },
-    "Eggplant parmesan": {
-        "Main Ingredients": [
-            "3 large eggplant, peeled and thinly sliced",
-            "2 large eggs, beaten",
-            "4 cups Italian seasoned bread crumbs",
-            "6 cups spaghetti sauce, divided",
-            "1 (16 ounce) package mozzarella cheese, shredded and divided",
-            "½ cup grated Parmesan cheese, divided",
-            "½ teaspoon dried basil"
         ]
     },
     "Gamja Bokkeum": {
@@ -185,7 +177,7 @@ INGREDIENTS = {
             "Crumbled or slivered nori (roasted seaweed) for garnish"
         ]
     },
-    'Kimbap bowl': {
+    "Kimbap bowl": {
         "Main Ingredients": [
             "4 gim, dried seaweed aka nori",
             "cooking oil"
@@ -337,8 +329,6 @@ INGREDIENTS = {
             "2 cups Light chicken stock, or liquid for cooking the noodles as needed"
         ]
     },
-
-
 }
 
 ORDER_OUT_OPTIONS = [
@@ -358,12 +348,15 @@ DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturda
 def format_ingredients(ingredients):
     """Format ingredients as bullet points."""
     if isinstance(ingredients, dict):
-        return "\n\n".join([f"**{key}**:\n" + "\n".join([f"- {item}" for item in value]) for key, value in ingredients.items()])
+        return "\n\n".join([
+            f"**{section}**:\n" + "\n".join([f"- {item}" for item in items])
+            for section, items in ingredients.items()
+        ])
     return ingredients
 
 
-def generate_meal_plan():
-    """Generate a weekly meal plan with meals and corresponding ingredients."""
+def generate_meal_plan_dict():
+    """Generate a weekly meal plan as a dictionary with meals and corresponding ingredients."""
     order_out_day = random.choice(DAYS_OF_WEEK)
     meal_plan = {
         day: random.choice(ORDER_OUT_OPTIONS) if day == order_out_day else random.choice(COOK_OPTIONS)
@@ -377,41 +370,101 @@ def generate_meal_plan():
         }
         for day, meal in meal_plan.items()
     }
-
-    meal_plan_df = pd.DataFrame(meal_plan_with_ingredients).T
-    return "\n\n".join(
-        f"{day}:\nMeal: {row['Meal']}\nIngredients:\n{row['Ingredients']}"
-        for day, row in meal_plan_df.iterrows()
-    )
+    
+    return meal_plan_with_ingredients
 
 
-def send_email(meal_plan):
-    """Send the meal plan via email."""
-    # Fetch the credentials from environment variables
-    EMAIL_USERNAME = os.environ['email_username'] # [should match yaml def]
-    EMAIL_PASSWORD = os.environ['email_password'] # [should match yaml def]
+def get_next_week_monday(start_from=None):
+    """
+    Returns the date for the Monday of the upcoming week.
+    That is, if today is any day of the current week, the function
+    returns the Monday of the following week.
+    """
+    if start_from is None:
+        start_from = datetime.today().date()
+    
+    # Find this week's Monday:
+    current_monday = start_from - timedelta(days=start_from.weekday())
+    # Next week's Monday is 7 days after this week's Monday:
+    next_week_monday = current_monday + timedelta(days=7)
+    
+    return next_week_monday
+
+
+def generate_ical(meal_plan_with_ingredients, start_date=None):
+    """
+    Generates an iCal file from the meal plan.
+    meal_plan_with_ingredients: dict from generate_meal_plan_dict.
+    start_date: datetime.date object representing the Monday to start the week. 
+                Defaults to next week's Monday.
+    """
+    if start_date is None:
+        start_date = get_next_week_monday()
+    
+    cal = Calendar()
+    
+    # Map DAYS_OF_WEEK to dates starting from start_date (Monday)
+    for idx, day in enumerate(DAYS_OF_WEEK):
+        event_date = start_date + timedelta(days=idx)
+        details = meal_plan_with_ingredients.get(day, {})
+        meal = details.get("Meal", "Meal not set")
+        ingredients = details.get("Ingredients", "")
+        
+        event = Event()
+        event.name = f"{day}: {meal}"
+        event.begin = event_date.isoformat()
+        event.make_all_day()
+        event.description = f"Meal: {meal}\n\nIngredients:\n{ingredients}"
+        cal.events.add(event)
+    
+    ics_filename = "meal_plan.ics"
+    with open(ics_filename, 'w') as my_file:
+        my_file.writelines(cal)
+    
+    print(f"iCal file '{ics_filename}' generated successfully!")
+    return ics_filename
+
+
+def send_email(meal_plan, ical_filename):
+    """Send the meal plan via email with the iCal file attached."""
+    EMAIL_USERNAME = os.environ['email_username']
+    EMAIL_PASSWORD = os.environ['email_password']
 
     if not EMAIL_USERNAME or not EMAIL_PASSWORD:
         raise ValueError("Email credentials not found. Ensure they are set properly in GitHub Actions.")
 
-    receiver_email = EMAIL_USERNAME
+    receiver_email = EMAIL_USERNAME  # or set to a different recipient if desired
     body = f"""
     <html>
         <body>
             <p>Here is your weekly meal plan:</p>
             <pre>{meal_plan}</pre>
+            <p>The attached calendar file (meal_plan.ics) can be imported into your calendar application.</p>
         </body>
     </html>
     """
 
-    # Compose email
-    msg = MIMEMultipart('alternative')
+    # Create email container and attach HTML body
+    msg = MIMEMultipart()
     msg['From'] = EMAIL_USERNAME
     msg['To'] = receiver_email
     msg['Subject'] = SUBJECT
     msg.attach(MIMEText(body, 'html'))
 
-    # Send the email
+    # Attach the iCal file
+    with open(ical_filename, 'rb') as f:
+        ical_data = f.read()
+    
+    mime_type, _ = mimetypes.guess_type(ical_filename)
+    maintype, subtype = mime_type.split('/') if mime_type else ('application', 'octet-stream')
+    
+    part = MIMEBase(maintype, subtype)
+    part.set_payload(ical_data)
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', f'attachment; filename="{ical_filename}"')
+    msg.attach(part)
+
+    # Send the email via SMTP SSL
     try:
         with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=ssl.create_default_context()) as server:
             server.login(EMAIL_USERNAME, EMAIL_PASSWORD)
@@ -422,10 +475,18 @@ def send_email(meal_plan):
 
 
 def main():
-    """Main function to generate the meal plan and send it via email."""
-    meal_plan_output = generate_meal_plan()
-    # print(meal_plan_output)  # Optionally print to console for debugging
-    send_email(meal_plan_output)
+    # Generate the meal plan as a dictionary
+    meal_plan_dict = generate_meal_plan_dict()
+    meal_plan_output = "\n\n".join(
+        f"{day}:\nMeal: {details['Meal']}\nIngredients:\n{details['Ingredients']}"
+        for day, details in meal_plan_dict.items()
+    )
+    
+    # Generate the iCal file (scheduled for next week's Monday)
+    ical_filename = generate_ical(meal_plan_dict)
+    
+    # Send the email with the meal plan and attached iCal file
+    send_email(meal_plan_output, ical_filename)
 
 
 if __name__ == "__main__":
