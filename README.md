@@ -10,6 +10,7 @@ You can get the meal plan straight to your inbox _along with the ingredients to 
 __Requirements__
   
 - Python Python 3.11.8
+- [requirements.txt](requirements.txt)
   
 __Customization__
   
@@ -26,9 +27,10 @@ You can get that either in your windows notification center as a pop up...
 or get a text message or an email.\
 ![whatsapp message](Media/Outputs/weekend_planner_windows_popup.PNG)
 
-__Requirements__ \
-[requirements.txt](requirements.txt)
-
+__Requirements__
+  
+- Python Python 3.11.8
+- [requirements.txt](requirements.txt)
 __Customization__
   
 You can modify the activities or add new ones as per your preference. Just edit the `exercise`, `chore`, and `leisure` lists in the script to include your desired activities.  
