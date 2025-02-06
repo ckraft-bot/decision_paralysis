@@ -31,6 +31,7 @@ __Requirements__
   
 - Python Python 3.11.8
 - [requirements.txt](requirements.txt)
+  
 __Customization__
   
 You can modify the activities or add new ones as per your preference. Just edit the `exercise`, `chore`, and `leisure` lists in the script to include your desired activities.  
