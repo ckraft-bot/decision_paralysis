@@ -16,7 +16,7 @@ SUBJECT = "Weekly Meal Plan"
 COOK_OPTIONS = [
     'Bibimbab',
     'Buddha bowl',
-    'Eggplant parmesan',
+    # 'Eggplant parmesan',
     'Fruit smoothie',
     'Gamja Bokkeum',
     'Gyeran mari',
