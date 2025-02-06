@@ -26,8 +26,8 @@ You can get that either in your windows notification center as a pop up...
 or get a text message or an email.\
 ![whatsapp message](Media/Outputs/weekend_planner_windows_popup.PNG)
 
-__Requirements__ 
-![requirements.txt](requirements.txt)
+__Requirements__ \
+[requirements.txt](requirements.txt)
 
 __Customization__
   
