@@ -33,7 +33,6 @@ COOK_OPTIONS = [
     'Omurice',
     'Pad woon sen',
     'Pajun',
-    #'Ramen',
     'Rice & seaweed',
     'Shrimp tacos',
     'Spicy ramen',
