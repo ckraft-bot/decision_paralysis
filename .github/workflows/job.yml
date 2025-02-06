@@ -3,13 +3,13 @@ name: Meal Planner Job
 # Controls when the workflow will run
 on:
   # Triggers the workflow on PRs
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
 
   # Triggers the workflow 3 am every Saturday
-  # schedule:
-  #   - cron: "0 3 * * 6"
+  schedule:
+    - cron: "0 3 * * 6"
 
 env:
   email_password: ${{ secrets.EMAIL_PASSWORD }} # env_var: secrets.REPO_SECRETS
