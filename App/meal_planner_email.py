@@ -22,10 +22,11 @@ COOK_OPTIONS = [
     'Bibimbab',
     'Buddha bowl',
     #'Eggplant parmesan',  # too long of a prep time
+    'Frances Cabbage',
     'Fruit smoothie',
     'Gamja Bokkeum',
     'Gyeran mari',
-    'Japchae',
+    # 'Japchae',  # too long of a prep time
     'Kimchi jjigae',
     'Kimchi fried rice',
     'Kimbap bowl',
@@ -101,6 +102,17 @@ INGREDIENTS = {
             "2 tablespoons corn starch",
             "2 tablespoons gluten free plain breadcrumbs or regular",
             "½ cup peanut sauce"
+        ]
+    },
+    "Frances Cabbage": {
+        "Main Ingredients": [
+            "1 head of cabbage",
+            "1 garlic clove",
+            "cheese",
+            "bacon bits",
+            "1 tablespoon olive oil",
+            "salt",
+            "pepper",
         ]
     },
     "Gamja Bokkeum": {
@@ -281,7 +293,7 @@ INGREDIENTS = {
             "Frozen tilapia",
             "Mixed vegetables of your choice",
             "2 Tbsp olive oil",
-            "1 ½ tsp Italian seasoning",
+            "1½ tsp Italian seasoning",
             "2 - 3 cloves garlic, minced",
             "Salt and freshly ground black pepper",
             "1 cup grape tomatoes (optional)",
