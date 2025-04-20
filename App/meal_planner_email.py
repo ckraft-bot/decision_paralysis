@@ -12,6 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from ics import Calendar, Event
 from datetime import datetime, timedelta
+from fractions import Fraction
 
 # Constants
 SMTP_SERVER = "smtp.gmail.com"
@@ -357,8 +358,35 @@ ORDER_OUT_OPTIONS = [
 DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 
+# -- Parsing Helpers --
+UNIT_MAP = {
+    'tsp': 'teaspoon', 'tsp.': 'teaspoon', 'teaspoons': 'teaspoon', 'teaspoon': 'teaspoon',
+    'tbsp': 'tablespoon', 'tbsp.': 'tablespoon', 'tablespoons': 'tablespoon', 'tablespoon': 'tablespoon',
+    'cup': 'cup', 'cups': 'cup',
+    # add more mappings if needed
+}
+
+def parse_ingredient(line):
+    """
+    Parse a line like '2 tsp. Sesame Oil' into (quantity: float, unit: str, item: str).
+    Returns (None, None, original_line) if no match.
+    """
+    match = re.match(r"^([\d\s\/\.]+)\s*([A-Za-z\.]+)\s+(.+)$", line)
+    if not match:
+        return None, None, line
+    qty_str, unit_raw, item = match.groups()
+    # parse quantity (including fractions)
+    try:
+        qty = float(sum(Fraction(s) for s in qty_str.split()))
+    except Exception:
+        return None, None, line
+    unit_norm = UNIT_MAP.get(unit_raw.lower(), unit_raw.lower())
+    item_norm = item.strip().lower()
+    return qty, unit_norm, item_norm
+
+# -- Core Functions --
+
 def format_ingredients(ingredients):
-    """Format ingredients as bullet points."""
     if isinstance(ingredients, dict):
         return "\n\n".join([
             f"**{section}**:\n" + "\n".join([f"- {item}" for item in items])
@@ -368,138 +396,121 @@ def format_ingredients(ingredients):
 
 
 def generate_meal_plan_dict():
-    """Generate a weekly meal plan as a dictionary with meals and corresponding ingredients."""
     order_out_day = random.choice(DAYS_OF_WEEK)
     meal_plan = {
         day: random.choice(ORDER_OUT_OPTIONS) if day == order_out_day else random.choice(COOK_OPTIONS)
         for day in DAYS_OF_WEEK
     }
-    
-    meal_plan_with_ingredients = {
+    return {
         day: {
             "Meal": meal,
-            "Ingredients": format_ingredients(INGREDIENTS.get(meal, "Order out or ingredients not available"))
+            "Ingredients": format_ingredients(INGREDIENTS.get(meal, {}))
         }
         for day, meal in meal_plan.items()
     }
-    
-    return meal_plan_with_ingredients
+
+
+def aggregate_ingredients(meal_plan_dict):
+    """
+    Aggregate raw ingredients into summed quantities per item+unit.
+    Returns dict mapping item -> {unit: total_qty} or list of lines for non-parsable.
+    """
+    totals = {}
+    others = []
+    for details in meal_plan_dict.values():
+        raw = INGREDIENTS.get(details['Meal'])
+        if isinstance(raw, dict):
+            for section_items in raw.values():
+                for line in section_items:
+                    qty, unit, item = parse_ingredient(line)
+                    if qty is not None:
+                        key = item
+                        totals.setdefault(key, {}).setdefault(unit, 0)
+                        totals[key][unit] += qty
+                    else:
+                        others.append(line)
+    # Format totals back to strings
+    agg = {}
+    for item, unit_dict in totals.items():
+        agg[item] = [f"{unit_dict[unit]} {unit} {item}" for unit in unit_dict]
+    if others:
+        agg['misc'] = others
+    return agg
 
 
 def get_next_week_monday(start_from=None):
-    """
-    Returns the date for the Monday of the upcoming week.
-    That is, if today is any day of the current week, the function
-    returns the Monday of the following week.
-    """
     if start_from is None:
         start_from = datetime.today().date()
-    
-    # Find this week's Monday:
     current_monday = start_from - timedelta(days=start_from.weekday())
-    # Next week's Monday is 7 days after this week's Monday:
-    next_week_monday = current_monday + timedelta(days=7)
-    
-    return next_week_monday
+    return current_monday + timedelta(days=7)
 
 
 def generate_ical(meal_plan_with_ingredients, start_date=None):
-    """
-    Generates an iCal file from the meal plan.
-    meal_plan_with_ingredients: dict from generate_meal_plan_dict.
-    start_date: datetime.date object representing the Monday to start the week. 
-                Defaults to next week's Monday.
-    """
     if start_date is None:
         start_date = get_next_week_monday()
-    
     cal = Calendar()
-    
-    # Map DAYS_OF_WEEK to dates starting from start_date (Monday)
     for idx, day in enumerate(DAYS_OF_WEEK):
-        event_date = start_date + timedelta(days=idx)
+        date = start_date + timedelta(days=idx)
         details = meal_plan_with_ingredients.get(day, {})
-        meal = details.get("Meal", "Meal not set")
-        ingredients = details.get("Ingredients", "")
-        
-        event = Event()
-        event.name = f"{day}: {meal}"
-        event.begin = event_date.isoformat()
-        event.make_all_day()
-        event.description = f"Meal: {meal}\n\nIngredients:\n{ingredients}"
-        cal.events.add(event)
-    
-    ics_filename = "meal_plan.ics"
-    with open(ics_filename, 'w') as my_file:
-        my_file.writelines(cal)
-    
-    print(f"iCal file '{ics_filename}' generated successfully!")
-    return ics_filename
+        evt = Event()
+        evt.name = f"{day}: {details.get('Meal')}"
+        evt.begin = date.isoformat()
+        evt.make_all_day()
+        evt.description = f"Meal: {details.get('Meal')}\n\nIngredients:\n{details.get('Ingredients')}"
+        cal.events.add(evt)
+    filename = 'meal_plan.ics'
+    with open(filename, 'w') as f:
+        f.writelines(cal)
+    return filename
 
 
-def send_email(meal_plan, ical_filename):
-    """Send the meal plan via email with the iCal file attached."""
-    EMAIL_USERNAME = os.environ['email_username']
-    EMAIL_PASSWORD = os.environ['email_password']
-
+def send_email(meal_plan_text, shopping_list, ical_filename):
+    EMAIL_USERNAME = os.environ.get('email_username')
+    EMAIL_PASSWORD = os.environ.get('email_password')
     if not EMAIL_USERNAME or not EMAIL_PASSWORD:
-        raise ValueError("Email credentials not found. Ensure they are set properly in GitHub Actions.")
-
-    receiver_email = EMAIL_USERNAME  # or set to a different recipient if desired
+        raise ValueError("Email credentials missing.")
+    # Build shopping list HTML
+    shop_html = '<h3>Aggregated Shopping List:</h3><ul>'
+    for item, lines in shopping_list.items():
+        shop_html += f'<li><strong>{item.title()}:</strong><ul>'
+        for line in lines:
+            shop_html += f'<li>{line}</li>'
+        shop_html += '</ul></li>'
+    shop_html += '</ul>'
     body = f"""
-    <html>
-        <body>
-            <p>Here is your weekly meal plan:</p>
-            <pre>{meal_plan}</pre>
-            <p>The attached calendar file (meal_plan.ics) can be imported into your calendar application.</p>
-        </body>
-    </html>
+    <html><body>
+        <p>Here is your weekly meal plan:</p>
+        <pre>{meal_plan_text}</pre>
+        {shop_html}
+        <p>Attached calendar: {ical_filename}</p>
+    </body></html>
     """
-
-    # Create email container and attach HTML body
     msg = MIMEMultipart()
     msg['From'] = EMAIL_USERNAME
-    msg['To'] = receiver_email
+    msg['To'] = EMAIL_USERNAME
     msg['Subject'] = SUBJECT
     msg.attach(MIMEText(body, 'html'))
-
-    # Attach the iCal file
+    # attach ical
     with open(ical_filename, 'rb') as f:
-        ical_data = f.read()
-    
-    mime_type, _ = mimetypes.guess_type(ical_filename)
-    maintype, subtype = mime_type.split('/') if mime_type else ('application', 'octet-stream')
-    
-    part = MIMEBase(maintype, subtype)
-    part.set_payload(ical_data)
+        data = f.read()
+    mtype, _ = mimetypes.guess_type(ical_filename)
+    maint, sub = mtype.split('/') if mtype else ('application','octet-stream')
+    part = MIMEBase(maint, sub)
+    part.set_payload(data)
     encoders.encode_base64(part)
     part.add_header('Content-Disposition', f'attachment; filename="{ical_filename}"')
     msg.attach(part)
-
-    # Send the email via SMTP SSL
-    try:
-        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=ssl.create_default_context()) as server:
-            server.login(EMAIL_USERNAME, EMAIL_PASSWORD)
-            server.sendmail(EMAIL_USERNAME, receiver_email, msg.as_string())
-        print(f"Email sent to {receiver_email}")
-    except smtplib.SMTPException as e:
-        print(f"Failed to send email: {e}")
+    with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=ssl.create_default_context()) as s:
+        s.login(EMAIL_USERNAME, EMAIL_PASSWORD)
+        s.sendmail(EMAIL_USERNAME, EMAIL_USERNAME, msg.as_string())
 
 
 def main():
-    # Generate the meal plan as a dictionary
-    meal_plan_dict = generate_meal_plan_dict()
-    meal_plan_output = "\n\n".join(
-        f"{day}:\nMeal: {details['Meal']}\nIngredients:\n{details['Ingredients']}"
-        for day, details in meal_plan_dict.items()
-    )
-    
-    # Generate the iCal file (scheduled for next week's Monday)
-    ical_filename = generate_ical(meal_plan_dict)
-    
-    # Send the email with the meal plan and attached iCal file
-    send_email(meal_plan_output, ical_filename)
+    plan = generate_meal_plan_dict()
+    plan_text = '\n\n'.join(f"{day}: {v['Meal']}" for day,v in plan.items())
+    aggregated = aggregate_ingredients(plan)
+    ics = generate_ical(plan)
+    send_email(plan_text, aggregated, ics)
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
