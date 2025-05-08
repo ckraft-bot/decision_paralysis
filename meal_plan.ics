@@ -2,45 +2,45 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:ics.py - http://git.io/lLljaA
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250516
-DESCRIPTION:Meal 🍽️: Pajun\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 2 cups all-purpose flour<br>&bull\; 2 large eggs\, beaten<br>&bull\; 1 teaspoon kosher salt<br>&bull\; 1 bunch scallions\, green and white parts\; halved lengthwise and cut into 2- to 3-inch lengths<br>&bull\; 1½ cups water<br>&bull\; 1½ tablespoons vegetable oil\, for frying<br>&bull\; Soy sauce\, or spicy dipping sauce\, for serving
-SUMMARY:Friday: Pajun
-UID:dbb566a4-a144-4bd4-9607-aa06b19736d1@dbb5.org
+DTSTART;VALUE=DATE:20250514
+DESCRIPTION:Meal 🍽️: Bibimbab\n\nIngredients 🛒:\n<strong>Rice</strong><br>&bull\; 3 cups short grain rice<br><br><strong>Meat</strong><br>&bull\; 8 ounces thinly sliced tender beef (rib eye\, sirloin\, etc. or ground beef)<br>&bull\; 1½ tablespoons soy sauce<br>&bull\; 2 teaspoons sugar<br>&bull\; 2 teaspoons sesame oil<br>&bull\; 2 teaspoons rice wine<br>&bull\; 1 teaspoon minced garlic<br>&bull\; 1 tablespoon chopped scallion<br>&bull\; pepper to taste<br><br><strong>Vegetables and Eggs</strong><br>&bull\; 8 ounces mung bean sprouts (sukju\, 숙주) or soybean sprouts (kongnamul\, 콩나물)<br>&bull\; 1 bunch spinach\, about 8 ounces<br>&bull\; 2 small cucumbers\, about 5 ounces<br>&bull\; 4 ounces mushrooms (shiitake\, white\, cremini\, etc.)<br>&bull\; 2 medium carrots\, about 5 ounces<br>&bull\; 1 ½ teaspoons minced garlic\, divided<br>&bull\; 3 tablespoons chopped scallion\, divided<br>&bull\; sesame oil<br>&bull\; sesame seeds<br>&bull\; salt<br>&bull\; 4 eggs - optional<br>&bull\; cooking oil<br><br><strong>More Vegetable Options</strong><br>&bull\; 8 ounces Kongnamul (soybean sprouts)<br>&bull\; 10 ounces mu (Korean radish)<br><br><strong>Bibimbap Sauce</strong><br>&bull\; 4 tablespoons gochujang<br>&bull\; 2 teaspoons sugar - adjust to taste\, 1-3 teaspoons<br>&bull\; 1 tablespoon sesame oil<br>&bull\; 1 tablespoon water
+SUMMARY:Wednesday: Bibimbab
+UID:f8256df8-1b60-48cb-9eca-c5c484c9c22c@f825.org
 END:VEVENT
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250518
-DESCRIPTION:Meal 🍽️: Pajun\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 2 cups all-purpose flour<br>&bull\; 2 large eggs\, beaten<br>&bull\; 1 teaspoon kosher salt<br>&bull\; 1 bunch scallions\, green and white parts\; halved lengthwise and cut into 2- to 3-inch lengths<br>&bull\; 1½ cups water<br>&bull\; 1½ tablespoons vegetable oil\, for frying<br>&bull\; Soy sauce\, or spicy dipping sauce\, for serving
-SUMMARY:Sunday: Pajun
-UID:ea79324f-3f75-4848-b395-f1a89a475995@ea79.org
+DTSTART;VALUE=DATE:20250516
+DESCRIPTION:Meal 🍽️: Order out Thai\n\nIngredients 🛒:\nOrder out or ingredients not available
+SUMMARY:Friday: Order out Thai
+UID:9a114aa6-5ad7-4793-98e1-c09b2455182d@9a11.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20250515
-DESCRIPTION:Meal 🍽️: Rice & seaweed\n\nIngredients 🛒:\nOrder out or ingredients not available
-SUMMARY:Thursday: Rice & seaweed
-UID:44ff54f6-e9a4-44e4-bcb6-d514c73dac98@44ff.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250514
-DESCRIPTION:Meal 🍽️: Order out Fast food\n\nIngredients 🛒:\nOrder out or ingredients not available
-SUMMARY:Wednesday: Order out Fast food
-UID:0a0cba9f-d6a0-49ab-98a1-8d6b9a1ad9f8@0a0c.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250512
-DESCRIPTION:Meal 🍽️: Gyeran mari\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 4 - 5 large eggs<br>&bull\; 1 cup anchovy broth (or water or dashima broth) adjust to taste<br>&bull\; 1½ teaspoons salted shrimp (saeujeot) or 3/4 teaspoon salt (or fish sauce)<br>&bull\; 2 tablespoons chopped scallion<br>&bull\; 1 teaspoon sesame oil\, divided - optional<br>&bull\; ½ teaspoon sesame seeds - optional
-SUMMARY:Monday: Gyeran mari
-UID:81be8645-3d6d-4fe0-b6b1-425d8b438d0c@81be.org
+DESCRIPTION:Meal 🍽️: Kimchi jjigae\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 2 cups packed bite size kimchi fully fermented<br>&bull\; 4 ounces fresh pork belly or other pork meat with some fat or other protein choice<br>&bull\; 1 - 3 teaspoons gochugaru - adjust to taste or omit<br>&bull\; 1 teaspoon minced garlic<br>&bull\; 1 tablespoon cooking oil<br>&bull\; ½ cup juice from kimchi if available<br>&bull\; 6 ounces tofu<br>&bull\; 2 scallions<br>&bull\; salt (or a little bit of soup soy sauce or regular soy sauce) and pepper to taste
+SUMMARY:Thursday: Kimchi jjigae
+UID:69e44c0d-12e0-4598-8fef-03b3f3e6389f@69e4.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20250513
-DESCRIPTION:Meal 🍽️: Gamja Bokkeum\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 2 medium Yukon potatoes or 1 large russet potato<br>&bull\; 1 tablespoon oil<br>&bull\; 1 clove garlic\, minced<br>&bull\; ½ small onion\, thinly sliced<br>&bull\; ½ small carrot\, thinly sliced<br>&bull\; 2 green onions\, thinly sliced<br>&bull\; Salt to taste<br>&bull\; Pepper to taste<br>&bull\; 2 teaspoons toasted sesame seeds
-SUMMARY:Tuesday: Gamja Bokkeum
-UID:3a4e65ea-8bc6-41db-9266-d29dafecd3a8@3a4e.org
+DESCRIPTION:Meal 🍽️: Pad woon sen\n\nIngredients 🛒:\nOrder out or ingredients not available
+SUMMARY:Tuesday: Pad woon sen
+UID:f9f853ce-4667-4c87-8df3-f654da74bde1@f9f8.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250512
+DESCRIPTION:Meal 🍽️: Yangzhou fried rice\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 5 cups cooked white rice (about 2 cups uncooked\; preferably made the day before and refrigerated)<br>&bull\; 3 tablespoons cooking oil<br>&bull\; 2 carrots (diced)<br>&bull\; 1/3 cup peas (frozen or fresh)<br>&bull\; 10 shrimp (deveined\, deshelled\, no tail\; cut into small pieces)<br>&bull\; 3 eggs<br>&bull\; ½ cup char siu pork (or Chinese sausage\; cut into small pieces)<br>&bull\; 2 scallions (chopped)<br>&bull\; 1½ tablespoons soy sauce<br>&bull\; Pepper (to taste)<br>&bull\; Salt (to taste)
+SUMMARY:Monday: Yangzhou fried rice
+UID:cb0aa72a-e069-46d3-9a2f-afdafe3fae4c@cb0a.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20250517
-DESCRIPTION:Meal 🍽️: Kimchi jjigae\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 2 cups packed bite size kimchi fully fermented<br>&bull\; 4 ounces fresh pork belly or other pork meat with some fat or other protein choice<br>&bull\; 1 - 3 teaspoons gochugaru - adjust to taste or omit<br>&bull\; 1 teaspoon minced garlic<br>&bull\; 1 tablespoon cooking oil<br>&bull\; ½ cup juice from kimchi if available<br>&bull\; 6 ounces tofu<br>&bull\; 2 scallions<br>&bull\; salt (or a little bit of soup soy sauce or regular soy sauce) and pepper to taste
-SUMMARY:Saturday: Kimchi jjigae
-UID:b9b97bc9-6924-4f60-8ec9-7c0377e905c1@b9b9.org
+DESCRIPTION:Meal 🍽️: Gyeran mari\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 4 - 5 large eggs<br>&bull\; 1 cup anchovy broth (or water or dashima broth) adjust to taste<br>&bull\; 1½ teaspoons salted shrimp (saeujeot) or 3/4 teaspoon salt (or fish sauce)<br>&bull\; 2 tablespoons chopped scallion<br>&bull\; 1 teaspoon sesame oil\, divided - optional<br>&bull\; ½ teaspoon sesame seeds - optional
+SUMMARY:Saturday: Gyeran mari
+UID:dc5ff24a-07e3-424a-8220-19388f3fa40c@dc5f.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250518
+DESCRIPTION:Meal 🍽️: Yangzhou fried rice\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 5 cups cooked white rice (about 2 cups uncooked\; preferably made the day before and refrigerated)<br>&bull\; 3 tablespoons cooking oil<br>&bull\; 2 carrots (diced)<br>&bull\; 1/3 cup peas (frozen or fresh)<br>&bull\; 10 shrimp (deveined\, deshelled\, no tail\; cut into small pieces)<br>&bull\; 3 eggs<br>&bull\; ½ cup char siu pork (or Chinese sausage\; cut into small pieces)<br>&bull\; 2 scallions (chopped)<br>&bull\; 1½ tablespoons soy sauce<br>&bull\; Pepper (to taste)<br>&bull\; Salt (to taste)
+SUMMARY:Sunday: Yangzhou fried rice
+UID:cffbd83d-7192-46e1-8a64-50283897761f@cffb.org
 END:VEVENT
 END:VCALENDAR
