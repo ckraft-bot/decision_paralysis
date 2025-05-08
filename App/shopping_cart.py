@@ -34,14 +34,21 @@ class SignInPage:
     def goto(self):
         logger.info("Navigating to the sign-in page.")
         
-        # Wait until the "hf-account-flyout" element is clickable
         try:
-            account_flyout = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.ID, "hf-account-flyout"))
+            elements = self.driver.find_elements(By.ID, "hf-account-flyout")
+            if not elements:
+                logger.error("Sign-in element not found!")
+                return
+            account_flyout = elements[0]
+            account_flyout = WebDriverWait(self.driver, 20).until(
+                # EC.element_to_be_clickable((By.ID, "hf-account-flyout"))
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Sign in')]"))
             )
+            
             account_flyout.click()
         except Exception as e:
             logger.error(f"Error navigating to sign-in page: {e}")
+            account_flyout = None  # Explicitly assign a default value
             raise
 
     def sign_in(self, WALMART_USERNAME, WALMART_PASSWORD):
@@ -181,7 +188,6 @@ def main():
     finally:
         close_browser(driver)
         logger.info("Automation script finished.")
-
 
 if __name__ == '__main__':
     main()
