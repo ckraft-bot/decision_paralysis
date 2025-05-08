@@ -6,12 +6,21 @@ import random
 import smtplib
 import ssl
 import mimetypes
+import logging
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from ics import Calendar, Event
 from datetime import datetime, timedelta
+
+# Logging configuration
+logging.basicConfig(
+    level=logging.INFO,  # change to DEBUG for more verbosity
+    format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
 
 # Constants
 SMTP_SERVER = "smtp.gmail.com"
@@ -382,15 +391,15 @@ ORDER_OUT_OPTIONS = [
 DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 
-def format_ingredients(ingredients):
-    """Format ingredients as bullet points."""
+def format_ingredients_html(ingredients):
+    """Format ingredients as HTML for email clients."""
     if isinstance(ingredients, dict):
-        return "\n\n".join([
-            f"**{section}**:\n" + "\n".join([f"- {item}" for item in items])
+        return "<br><br>".join([
+            f"<strong>{section}</strong><br>" + "<br>".join([f"&bull; {item}" for item in items])
             for section, items in ingredients.items()
         ])
-    return ingredients
-
+    
+    return ingredients.replace("\n", "<br>")
 
 def generate_meal_plan_dict():
     """Generate a weekly meal plan as a dictionary with meals and corresponding ingredients."""
@@ -403,11 +412,11 @@ def generate_meal_plan_dict():
     meal_plan_with_ingredients = {
         day: {
             "Meal": meal,
-            "Ingredients": format_ingredients(INGREDIENTS.get(meal, "Order out or ingredients not available"))
+            "Ingredients": format_ingredients_html(INGREDIENTS.get(meal, "Order out or ingredients not available"))
         }
         for day, meal in meal_plan.items()
     }
-    
+
     return meal_plan_with_ingredients
 
 
@@ -451,14 +460,17 @@ def generate_ical(meal_plan_with_ingredients, start_date=None):
         event.name = f"{day}: {meal}"
         event.begin = event_date.isoformat()
         event.make_all_day()
-        event.description = f"Meal: {meal}\n\nIngredients:\n{ingredients}"
+        event.description = f"Meal 🍽️: {meal}\n\nIngredients 🛒:\n{ingredients}"
         cal.events.add(event)
     
     ics_filename = "meal_plan.ics"
-    with open(ics_filename, 'w') as my_file:
+    with open(ics_filename, 'w', encoding='utf-8') as my_file:
+    # with open(ics_filename, 'w') as my_file:
         my_file.writelines(cal)
     
-    print(f"iCal file '{ics_filename}' generated successfully!")
+    #print(f"iCal file '{ics_filename}' generated successfully!")
+    logger.info("Generated iCal file %s", ics_filename)
+
     return ics_filename
 
 
@@ -506,24 +518,28 @@ def send_email(meal_plan, ical_filename):
         with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=ssl.create_default_context()) as server:
             server.login(EMAIL_USERNAME, EMAIL_PASSWORD)
             server.sendmail(EMAIL_USERNAME, receiver_email, msg.as_string())
-        print(f"Email sent to {receiver_email}")
+            logger.info("Email sent to %s", receiver_email)
+        # print(f"Email sent to {receiver_email}")
     except smtplib.SMTPException as e:
-        print(f"Failed to send email: {e}")
+        logger.error("Failed to send email: %s", e, exc_info=True)
+        # print(f"Failed to send email: {e}")
 
 
 def main():
-    # Generate the meal plan as a dictionary
+    logger.info("Starting meal-plan generation")
     meal_plan_dict = generate_meal_plan_dict()
+    logger.debug("Meal plan dict: %s", meal_plan_dict)
+
     meal_plan_output = "\n\n".join(
         f"{day}:\nMeal: {details['Meal']}\nIngredients:\n{details['Ingredients']}"
         for day, details in meal_plan_dict.items()
     )
-    
-    # Generate the iCal file (scheduled for next week's Monday)
+
     ical_filename = generate_ical(meal_plan_dict)
-    
-    # Send the email with the meal plan and attached iCal file
+    logger.debug("iCal filename: %s", ical_filename)
+
     send_email(meal_plan_output, ical_filename)
+    logger.info("Finished sending meal-plan email")
 
 
 if __name__ == "__main__":
