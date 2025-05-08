@@ -1,7 +1,6 @@
 from Util.base_page import BasePage
 from selenium.webdriver.support.ui import Select
 
-
 class ProductPage(BasePage):
 
     # locators
