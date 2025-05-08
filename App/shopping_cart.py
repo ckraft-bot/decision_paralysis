@@ -5,8 +5,10 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager # https://pypi.org/project/webdriver-manager/
 import meal_planner_email
 from meal_planner_email import INGREDIENTS
+
 
 # ——— Logging setup ———
 logging.basicConfig(
@@ -17,15 +19,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ── CONFIG ──
-# WALMART_EMAIL = os.getenv("WALMART_EMAIL")
-# WALMART_PASSWORD = os.getenv("WALMART_PASSWORD")
-WALMART_STORE_ID = os.getenv("WALMART_STORE_ID")  # default zip code
+WALMART_USERNAME = os.getenv("WALMART_USERNAME")
+WALMART_PASSWORD = os.getenv("WALMART_PASSWORD")
+WALMART_ZIPCODE  = os.getenv("WALMART_ZIPCODE", "10001")  # default zip code if not set
 
-# Selenium setup
+# Selenium options
 chrome_opts = Options()
 chrome_opts.add_argument("--headless")
 chrome_opts.add_argument("--disable-gpu")
 chrome_opts.add_argument("--window-size=1920,1080")
+
 
 def init_driver():
     logger.info("Initializing headless Chrome driver")
@@ -41,7 +44,7 @@ def login(driver):
     # email field
     email_input = driver.find_element(By.ID, "email")
     email_input.clear()
-    email_input.send_keys(WALMART_EMAIL)
+    email_input.send_keys(WALMART_USERNAME)
     # password field
     pw_input = driver.find_element(By.ID, "password")
     pw_input.clear()
@@ -59,8 +62,8 @@ def login(driver):
 
 
 def set_store(driver):
-    logger.info("Setting store zip code to %s", WALMART_STORE_ID)
-    driver.get(f"https://www.walmart.com/store/finder?zipcode={WALMART_STORE_ID}")
+    logger.info("Setting store zip code to %s", WALMART_ZIPCODE)
+    driver.get(f"https://www.walmart.com/store/finder?zipcode={WALMART_ZIPCODE}")
     time.sleep(2)
     # click first 'Select this store'
     try:
@@ -82,10 +85,7 @@ def add_item_to_cart(driver, query):
     time.sleep(2)
     # add to cart
     try:
-        add_btn = driver.find_element(
-            By.CSS_SELECTOR,
-            "button.prod-ProductCTA--primary"
-        )
+        add_btn = driver.find_element(By.CSS_SELECTOR, "button.prod-ProductCTA--primary")
         add_btn.click()
         logger.info("➕ Added '%s' to cart", query)
         time.sleep(1)
@@ -94,7 +94,6 @@ def add_item_to_cart(driver, query):
 
 
 def build_shopping_list(plan_dict):
-    from itertools import chain
     items = []
     for details in plan_dict.values():
         meal = details['Meal']
@@ -108,8 +107,8 @@ def build_shopping_list(plan_dict):
 
 
 if __name__ == '__main__':
-    if not (WALMART_EMAIL and WALMART_PASSWORD):
-        logger.error("Missing WALMART_EMAIL or WALMART_PASSWORD environment variables")
+    if not (WALMART_USERNAME and WALMART_PASSWORD):
+        logger.error("Missing WALMART_USERNAME or WALMART_PASSWORD environment variables")
         exit(1)
 
     driver = init_driver()
