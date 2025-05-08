@@ -7,6 +7,8 @@ You can get the meal plan straight to your inbox _along with the ingredients to 
 
 ![The output content](Media/Outputs/meal_planner_email.png)
 
+Adding ingredients to the walmart cart is inspired by this repo: https://github.com/orenrimer/grocery-list-automation
+
 __Requirements__
   
 - Python Python 3.11.8
