@@ -6,12 +6,21 @@ import random
 import smtplib
 import ssl
 import mimetypes
+import logging
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from ics import Calendar, Event
 from datetime import datetime, timedelta
+
+# Logging configuration
+logging.basicConfig(
+    level=logging.INFO,  # change to DEBUG for more verbosity
+    format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
 
 # Constants
 SMTP_SERVER = "smtp.gmail.com"
@@ -43,6 +52,32 @@ COOK_OPTIONS = [
     'Yangchun noodles',
 ]
 
+COOK_OPTIONS = [
+    'Bibimbab',
+    'Buddha bowl',
+    #'Eggplant parmesan',  # too long of a prep time
+    'Frances Cabbage',
+    'Fruit smoothie',
+    'Gamja Bokkeum',
+    'Gyeran mari',
+    # 'Japchae',  # too long of a prep time
+    'Kimchi jjigae',
+    'Kimchi fried rice',
+    'Kimbap bowl',
+    'Mandoo',
+    'Omurice',
+    'Pad woon sen',
+    'Pajun',
+    'Rice & seaweed',
+    'Shrimp tacos',
+    'Spicy ramen',
+    'Tilapia & baked vegetables',
+    'Tofu jorim',
+    'Tomato and egg',
+    'Yangzhou fried rice',
+    'Yangchun noodles',
+]
+
 INGREDIENTS = {
     "Bibimbab": {
         "Rice": [
@@ -50,7 +85,7 @@ INGREDIENTS = {
         ],
         "Meat": [
             "8 ounces thinly sliced tender beef (rib eye, sirloin, etc. or ground beef)",
-            "1 ½ tablespoons soy sauce",
+            "1½ tablespoons soy sauce",
             "2 teaspoons sugar",
             "2 teaspoons sesame oil",
             "2 teaspoons rice wine",
@@ -96,31 +131,42 @@ INGREDIENTS = {
         "Tofu": [
             "1 block extra firm tofu",
             "1 tablespoon low sodium tamari or soy sauce",
-            "1 tsp toasted sesame oil",
+            "1 teaspoon toasted sesame oil",
             "1 tablespoon maple syrup or honey",
             "2 tablespoons corn starch",
             "2 tablespoons gluten free plain breadcrumbs or regular",
             "½ cup peanut sauce"
         ]
     },
+    "Frances Cabbage": {
+        "Main Ingredients": [
+            "1 head of cabbage",
+            "1 garlic clove",
+            "cheese",
+            "bacon bits",
+            "1 tablespoon olive oil",
+            "salt",
+            "pepper",
+        ]
+    },
     "Gamja Bokkeum": {
         "Main Ingredients": [
             "2 medium Yukon potatoes or 1 large russet potato",
-            "1 tbsp oil",
+            "1 tablespoon oil",
             "1 clove garlic, minced",
             "½ small onion, thinly sliced",
             "½ small carrot, thinly sliced",
             "2 green onions, thinly sliced",
             "Salt to taste",
             "Pepper to taste",
-            "2 tsp toasted sesame seeds"
+            "2 teaspoons toasted sesame seeds"
         ]
     },
     "Gyeran mari": {
         "Main Ingredients": [
             "4 - 5 large eggs",
             "1 cup anchovy broth (or water or dashima broth) adjust to taste",
-            "1 ½ teaspoons salted shrimp (saeujeot) or 3/4 teaspoon salt (or fish sauce)",
+            "1½ teaspoons salted shrimp (saeujeot) or 3/4 teaspoon salt (or fish sauce)",
             "2 tablespoons chopped scallion",
             "1 teaspoon sesame oil, divided - optional",
             "½ teaspoon sesame seeds - optional"
@@ -133,14 +179,14 @@ INGREDIENTS = {
             "½ medium onion (preferably sweet variety, 4 to 5 ounces)",
             "2 scallions",
             "4 ounces lean tender beef (sirloin, chuck tender, rib eye, etc.) or pork loin",
-            "3 to 4 ounces fresh shiitake mushrooms (or 4 to 5 dried shiitake, soaked until plump)",
+            "3 - 4 ounces fresh shiitake mushrooms (or 4 to 5 dried shiitake, soaked until plump)",
             "6 ounces fresh spinach (preferably a bunch of spinach)",
             "oil for stir frying",
             "salt",
             "egg garnish (jidan) - optional"
         ],
         "Sauce": [
-            "3 ½ tablespoons soy sauce",
+            "3½ tablespoons soy sauce",
             "3 tablespoons sugar (or brown sugar, you can use a little less if you want)",
             "2 tablespoons sesame oil",
             "2 teaspoons minced garlic",
@@ -152,7 +198,7 @@ INGREDIENTS = {
         "Main Ingredients": [
             "2 cups packed bite size kimchi fully fermented",
             "4 ounces fresh pork belly or other pork meat with some fat or other protein choice",
-            "1 to 3 teaspoons gochugaru (Korean red chili pepper flakes) adjust to taste or omit",
+            "1 - 3 teaspoons gochugaru - adjust to taste or omit",
             "1 teaspoon minced garlic",
             "1 tablespoon cooking oil",
             "½ cup juice from kimchi if available",
@@ -183,7 +229,7 @@ INGREDIENTS = {
             "cooking oil"
         ],
         "For the Rice": [
-            "1 ½ cups uncooked short grain rice (standard measuring cup not the cup that comes with a rice cooker)",
+            "1½ cups uncooked short grain rice (standard measuring cup not the cup that comes with a rice cooker)",
             "1 tablespoon sesame oil",
             "salt to taste (about ½ teaspoon) start with a little less"
         ],
@@ -220,7 +266,7 @@ INGREDIENTS = {
             "1 small carrot finely chopped",
             "4 ounces beef or pork, chicken or shrimp, ground or finely chopped",
             "1 tablespoon soy sauce",
-            "1 ½ tablespoon ketchup adjust to taste, and more for decoration",
+            "1½ tablespoon ketchup adjust to taste, and more for decoration",
             "salt and pepper",
             "Oil for pan frying",
             "2 servings of cooked rice",
@@ -233,15 +279,15 @@ INGREDIENTS = {
             "2 large eggs, beaten",
             "1 teaspoon kosher salt",
             "1 bunch scallions, green and white parts; halved lengthwise and cut into 2- to 3-inch lengths",
-            "1 ½ cups water",
-            "1 ½ tablespoons vegetable oil, for frying",
+            "1½ cups water",
+            "1½ tablespoons vegetable oil, for frying",
             "Soy sauce, or spicy dipping sauce, for serving"
         ]
     },
     "Shrimp tacos": {
         "Main Ingredients": [
             "2 pounds large frozen peeled and deveined shrimp, thawed",
-            "1 ½ teaspoons chili powder",
+            "1½ teaspoons chili powder",
             "1 teaspoon freshly minced garlic",
             "½ teaspoon paprika",
             "½ teaspoon ground cumin",
@@ -251,7 +297,7 @@ INGREDIENTS = {
             "¼ teaspoon grated Valencia orange zest",
             "2 tablespoons olive oil, or more as needed",
             "2 tablespoons sour cream",
-            "1 tsp of lemon juice",
+            "1 teaspoon of lemon juice",
             "1 teaspoon chopped fresh cilantro",
             "¼ teaspoon garlic powder",
             "1 pinch salt and ground black pepper",
@@ -267,11 +313,11 @@ INGREDIENTS = {
         "Main Ingredients": [
             "2 Beef Steaks, cubed",
             "Salt and Pepper",
-            "2 tsp. Sesame Oil",
-            "3 tbsp. Kimchee Base or Gochujang Sauce",
-            "2 tbsp. Soy Sauce",
+            "2 teaspoon Sesame Oil",
+            "3 tablespoons Kimchee Base or Gochujang Sauce",
+            "2 tablespoons Soy Sauce",
             "¼ cup Scallions, chopped",
-            "1 ½ Cups Water",
+            "1½ cups Water",
             "1 Package Instant Ramen noodles",
             "Black sesame seeds"
         ]
@@ -280,12 +326,12 @@ INGREDIENTS = {
         "Main Ingredients": [
             "Frozen tilapia",
             "Mixed vegetables of your choice",
-            "2 Tbsp olive oil",
-            "1 ½ tsp Italian seasoning",
+            "2 tablespoon olive oil",
+            "1½ teaspoons Italian seasoning",
             "2 - 3 cloves garlic, minced",
             "Salt and freshly ground black pepper",
             "1 cup grape tomatoes (optional)",
-            "1 Tbsp fresh lemon juice"
+            "1 tablespoon fresh lemon juice"
         ]
     },
     "Tofu jorim": {
@@ -314,17 +360,17 @@ INGREDIENTS = {
             "3 eggs",
             "½ cup char siu pork (or Chinese sausage; cut into small pieces)",
             "2 scallions (chopped)",
-            "1 ½ tablespoons soy sauce",
+            "1½ tablespoons soy sauce",
             "Pepper (to taste)",
             "Salt (to taste)"
         ]
     },
     "Yangchun noodles": {
         "Main Ingredients": [
-            "100 g noodles",
-            "1 tbsp. soy sauce, or to taste",
-            "1 tsp. home rendered lard, or ½ teaspoon sesame oil",
-            "1/4 tsp. sugar",
+            "100 grams noodles",
+            "1 tablespoon soy sauce, or to taste",
+            "1 teaspoon home rendered lard, or ½ teaspoon sesame oil",
+            "1/4 teaspoon sugar",
             "1 green onion, finely chopped",
             "2 cups Light chicken stock, or liquid for cooking the noodles as needed"
         ]
@@ -345,15 +391,15 @@ ORDER_OUT_OPTIONS = [
 DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 
-def format_ingredients(ingredients):
-    """Format ingredients as bullet points."""
+def format_ingredients_html(ingredients):
+    """Format ingredients as HTML for email clients."""
     if isinstance(ingredients, dict):
-        return "\n\n".join([
-            f"**{section}**:\n" + "\n".join([f"- {item}" for item in items])
+        return "<br><br>".join([
+            f"<strong>{section}</strong><br>" + "<br>".join([f"&bull; {item}" for item in items])
             for section, items in ingredients.items()
         ])
-    return ingredients
-
+    
+    return ingredients.replace("\n", "<br>")
 
 def generate_meal_plan_dict():
     """Generate a weekly meal plan as a dictionary with meals and corresponding ingredients."""
@@ -366,11 +412,11 @@ def generate_meal_plan_dict():
     meal_plan_with_ingredients = {
         day: {
             "Meal": meal,
-            "Ingredients": format_ingredients(INGREDIENTS.get(meal, "Order out or ingredients not available"))
+            "Ingredients": format_ingredients_html(INGREDIENTS.get(meal, "Order out or ingredients not available"))
         }
         for day, meal in meal_plan.items()
     }
-    
+
     return meal_plan_with_ingredients
 
 
@@ -414,14 +460,17 @@ def generate_ical(meal_plan_with_ingredients, start_date=None):
         event.name = f"{day}: {meal}"
         event.begin = event_date.isoformat()
         event.make_all_day()
-        event.description = f"Meal: {meal}\n\nIngredients:\n{ingredients}"
+        event.description = f"Meal 🍽️: {meal}\n\nIngredients 🛒:\n{ingredients}"
         cal.events.add(event)
     
     ics_filename = "meal_plan.ics"
-    with open(ics_filename, 'w') as my_file:
+    with open(ics_filename, 'w', encoding='utf-8') as my_file:
+    # with open(ics_filename, 'w') as my_file:
         my_file.writelines(cal)
     
-    print(f"iCal file '{ics_filename}' generated successfully!")
+    #print(f"iCal file '{ics_filename}' generated successfully!")
+    logger.info("Generated iCal file %s", ics_filename)
+
     return ics_filename
 
 
@@ -469,24 +518,28 @@ def send_email(meal_plan, ical_filename):
         with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=ssl.create_default_context()) as server:
             server.login(EMAIL_USERNAME, EMAIL_PASSWORD)
             server.sendmail(EMAIL_USERNAME, receiver_email, msg.as_string())
-        print(f"Email sent to {receiver_email}")
+            logger.info("Email sent to %s", receiver_email)
+        # print(f"Email sent to {receiver_email}")
     except smtplib.SMTPException as e:
-        print(f"Failed to send email: {e}")
+        logger.error("Failed to send email: %s", e, exc_info=True)
+        # print(f"Failed to send email: {e}")
 
 
 def main():
-    # Generate the meal plan as a dictionary
+    logger.info("Starting meal-plan generation")
     meal_plan_dict = generate_meal_plan_dict()
+    logger.debug("Meal plan dict: %s", meal_plan_dict)
+
     meal_plan_output = "\n\n".join(
         f"{day}:\nMeal: {details['Meal']}\nIngredients:\n{details['Ingredients']}"
         for day, details in meal_plan_dict.items()
     )
-    
-    # Generate the iCal file (scheduled for next week's Monday)
+
     ical_filename = generate_ical(meal_plan_dict)
-    
-    # Send the email with the meal plan and attached iCal file
+    logger.debug("iCal filename: %s", ical_filename)
+
     send_email(meal_plan_output, ical_filename)
+    logger.info("Finished sending meal-plan email")
 
 
 if __name__ == "__main__":
