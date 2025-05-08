@@ -1,105 +1,96 @@
-import undetected_chromedriver as uc
-from selenium.webdriver import Chrome
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import time
-import logging
+import sys
 import os
+from selenium.webdriver import Chrome, Firefox
+from loguru import logger
+import time
+
+import Util
+from Util.sign_in_page import SignInPage
+from Util.result_page import ResultPage
+from Util.product_page import ProductPage
+from Util.cart_page import CartPage
+
+# Configure loguru: custom format to stdout
+logger.remove()
+logger.add(
+    sys.stdout,
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module}:{function}:{line} - {message}",
+    level="INFO",
+)
 
 # Walmart credentials
 WALMART_USERNAME = os.getenv("WALMART_USERNAME")
 WALMART_PASSWORD = os.getenv("WALMART_PASSWORD")
 if not WALMART_USERNAME or not WALMART_PASSWORD:
+    logger.error("WALMART_USERNAME and WALMART_PASSWORD must be set in environment variables.")
     raise ValueError("WALMART_USERNAME and WALMART_PASSWORD must be set in environment variables.")
 
 def get_grocery_list():
+    logger.info("Fetching grocery list.")
     return [
         ["bananas", "5", "2.00"],
         ["orange juice", "1", "4.00"],
         ["milk", "1", "7.00"]
     ]
 
-def open_browser(wait_time=10):
-    driver = Chrome()
+def open_browser(browser="chrome", wait_time=10):
+    logger.info(f"Opening {browser} browser.")
+    if browser == 'chrome':
+        driver = Chrome()
+    elif browser == 'firefox':
+        driver = Firefox()
+    else:
+        logger.error(f"Unsupported browser: {browser}")
+        raise Exception(f"Unsupported browser: {browser}")
+    
     BASE_URL = 'https://www.walmart.com'
     driver.maximize_window()
     driver.get(BASE_URL)
     driver.implicitly_wait(wait_time)
+    logger.info("Browser initialized and Walmart homepage loaded.")
     return driver
 
-
 def close_browser(driver):
+    logger.info("Closing browser.")
     driver.quit()
 
-
-def sign_in(driver):
-    driver.get("https://www.walmart.com/account/login")
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "email"))).send_keys(WALMART_USERNAME)
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "password"))).send_keys(WALMART_PASSWORD)
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-automation-id='signin-submit-btn']"))
-    ).click()
-    time.sleep(5)  # Wait for login to finish
-
-
-def clear_cart(driver):
-    driver.get("https://www.walmart.com/cart")
-    time.sleep(3)
-    remove_buttons = driver.find_elements(By.XPATH, "//button[contains(text(),'Remove')]")
-    for btn in remove_buttons:
-        try:
-            btn.click()
-            time.sleep(1)
-        except:
-            continue
-
-
-def search_item(driver, query):
-    search_box = driver.find_element(By.NAME, "query")
-    search_box.clear()
-    search_box.send_keys(query)
-    search_box.submit()
-    time.sleep(3)
-
-
-def choose_product_and_add_to_cart(driver, max_price, quantity):
-    try:
-        price_elements = driver.find_elements(By.CSS_SELECTOR, "span.price-characteristic")
-        if not price_elements:
-            return False
-        first_add_button = driver.find_element(By.CSS_SELECTOR, "button.prod-ProductCTA--primary")
-        first_add_button.click()
-        time.sleep(1)
-        return True
-    except Exception as e:
-        print(f"Failed to add item: {e}")
-        return False
-
-
-def take_screenshot(driver):
-    driver.save_screenshot("cart_screenshot.png")
-
-
 def main():
+    logger.info("Automation script started.")
     driver = open_browser()
+    sign_in = SignInPage(driver)
+    res = ResultPage(driver)
+    cart = CartPage(driver)
+    product_page = ProductPage(driver)
+
     try:
-        sign_in(driver)
-        clear_cart(driver)
+        logger.info("Signing in.")
+        sign_in.goto()
+        sign_in.sign_in(WALMART_USERNAME, WALMART_PASSWORD)
+
+        logger.info("Clearing shopping cart.")
+        cart.goto()
+        cart.clear_cart()
+
         grocery_list = get_grocery_list()
 
         for name, quantity, max_price in grocery_list:
-            search_item(driver, name)
-            added = choose_product_and_add_to_cart(driver, max_price, quantity)
-            if not added:
-                print(f"Could not add {name} to cart")
+            logger.info(f"Searching for '{name}' ({quantity}) under ${max_price}.")
+            sign_in.search(name)
+            r = res.choose_product(max_price)
+            if r:
+                logger.info(f"Adding '{name}' to cart.")
+                product_page.add_to_cart(quantity)
+            else:
+                logger.warning(f"No product found for '{name}' under ${max_price}.")
 
-        driver.get("https://www.walmart.com/cart")
-        time.sleep(3)
-        take_screenshot(driver)
+        logger.info("Navigating to cart for screenshot.")
+        cart.goto()
+        sign_in.take_screenshot()
+    except Exception as e:
+        logger.exception("Unhandled exception during automation.")
     finally:
         close_browser(driver)
-
+        logger.info("Automation script finished.")
 
 if __name__ == '__main__':
     main()
