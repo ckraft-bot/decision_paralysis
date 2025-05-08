@@ -32,8 +32,7 @@ def open_browser():
     options = uc.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-blink-features=AutomationControlled")
-    # force UC to fetch/use the driver matching your Chrome 135:
-    driver = uc.Chrome(version_main=135, options=options)
+    driver = uc.Chrome(version_main=int(os.getenv("CHROME_VERSION", "135")), options=options)
     driver.maximize_window()
     driver.implicitly_wait(10)
     driver.get("https://www.walmart.com")
@@ -43,12 +42,34 @@ def open_browser():
 def sign_in(driver):
     logger.info("Navigating directly to login page.")
     driver.get("https://www.walmart.com/account/login")
-    WebDriverWait(driver, 15).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "input[type='email'], input#email"))
-    )
-    driver.find_element(By.CSS_SELECTOR, "input[type='email'], input#email").send_keys(WALMART_USERNAME)
-    driver.find_element(By.CSS_SELECTOR, "input[type='password'], input#password").send_keys(WALMART_PASSWORD)
-    driver.find_element(By.CSS_SELECTOR, "input[type='password'], input#password").submit()
+    try:
+        # Wait for the email input by name attribute
+        WebDriverWait(driver, 15).until(
+            EC.visibility_of_element_located((By.NAME, "email"))
+        )
+    except Exception:
+        logger.error("Login page did not load or email field not found. Page title: %s", driver.title)
+        # optionally dump a snippet of page source for debugging
+        snippet = driver.page_source[:200]
+        logger.debug("Page source snippet: %s", snippet)
+        raise
+
+    email_field = driver.find_element(By.NAME, "email")
+    password_field = driver.find_element(By.NAME, "password")
+    logger.info("Entering credentials.")
+    email_field.clear()
+    email_field.send_keys(WALMART_USERNAME)
+    password_field.clear()
+    password_field.send_keys(WALMART_PASSWORD)
+
+    # Attempt to click sign-in button if present, else submit via form
+    try:
+        signin_btn = driver.find_element(By.XPATH, "//button[@type='submit' and (contains(., 'Sign in') or contains(., 'Log in'))]")
+        signin_btn.click()
+    except Exception:
+        password_field.submit()
+
+    logger.info("Login submitted, waiting for search input on homepage.")
     WebDriverWait(driver, 15).until(
         EC.presence_of_element_located((By.ID, "global-search-input"))
     )
@@ -61,9 +82,9 @@ def clear_cart(driver):
     for remove in driver.find_elements(By.CLASS_NAME, "remove-item"):
         remove.click()
 
+
 def get_grocery_list():
     logger.info("Fetching grocery list.")
-    # Only item name and quantity 
     return [
         ("bananas", "5"),
         ("orange juice", "1"),
@@ -74,32 +95,39 @@ def get_grocery_list():
 def shop_items(driver, items):
     for name, qty in items:
         logger.info(f"Searching for {name}.")
-        box = driver.find_element(By.ID, "global-search-input")
-        box.clear()
-        box.send_keys(name)
-        box.submit()
+        search_box = driver.find_element(By.ID, "global-search-input")
+        search_box.clear()
+        search_box.send_keys(name)
+        search_box.submit()
 
-        # wait for results
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located((By.CLASS_NAME, "search-result-gridview-item"))
-        )
-        products = driver.find_elements(By.CLASS_NAME, "search-result-gridview-item")
-
-        if not products:
-            logger.warning(f"No results found for {name}.")
+        # Wait for product grid items
+        try:
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".search-result-gridview-item"))
+            )
+        except Exception:
+            logger.warning(f"No search results for {name}.")
             driver.get("https://www.walmart.com")
             continue
 
-        # Click the first product
+        products = driver.find_elements(By.CSS_SELECTOR, ".search-result-gridview-item")
+        if not products:
+            logger.warning(f"No products found for {name}.")
+            driver.get("https://www.walmart.com")
+            continue
+
+        # Click the first product link
         products[0].find_element(By.TAG_NAME, "a").click()
+
+        # Wait for Add to cart button
         WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Add to cart') or contains(., 'Add to Cart')]))"))
-            )
-        btn = driver.find_element(By.XPATH, "//button[contains(., 'Add to cart') or contains(., 'Add to Cart')]")
-        btn.click()
+        )
+        add_btn = driver.find_element(By.XPATH, "//button[contains(., 'Add to cart') or contains(., 'Add to Cart')]")
+        add_btn.click()
         logger.info(f"{name} added to cart.")
 
-        # reset to homepage for next search
+        # Return to homepage for next iteration
         driver.get("https://www.walmart.com")
         WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.ID, "global-search-input"))
@@ -117,6 +145,7 @@ def main():
     finally:
         logger.info("Closing browser.")
         driver.quit()
+
 
 if __name__ == "__main__":
     main()
