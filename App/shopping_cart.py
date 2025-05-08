@@ -44,7 +44,7 @@ def sign_in(driver):
     driver.get("https://www.walmart.com/account/login")
     try:
         # Wait for the email input by name attribute
-        WebDriverWait(driver, 15).until(
+        WebDriverWait(driver, 120).until(
             EC.visibility_of_element_located((By.NAME, "email"))
         )
     except Exception:
@@ -119,11 +119,11 @@ def shop_items(driver, items):
         # Click the first product link
         products[0].find_element(By.TAG_NAME, "a").click()
 
-        # Wait for Add to cart button
+        # Wait for product page to load and Add to Cart button to be clickable
         WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Add to cart') or contains(., 'Add to Cart')]))"))
+            EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Add to cart') or contains(text(), 'Add to Cart')]"))
         )
-        add_btn = driver.find_element(By.XPATH, "//button[contains(., 'Add to cart') or contains(., 'Add to Cart')]")
+        add_btn = driver.find_element(By.XPATH, "//button[contains(text(), 'Add to cart') or contains(text(), 'Add to Cart')]")
         add_btn.click()
         logger.info(f"{name} added to cart.")
 
