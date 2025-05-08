@@ -7,3 +7,4 @@ google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.1
 ics==0.7.2
 selenium==4.32.0
+undetected-chromedriver==3.5.5 # bypasses captchas and bot detection
