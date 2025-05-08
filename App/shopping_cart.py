@@ -3,12 +3,11 @@ import time
 import logging
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager # https://pypi.org/project/webdriver-manager/
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 import meal_planner_email
 from meal_planner_email import INGREDIENTS
-
 
 # ——— Logging setup ———
 logging.basicConfig(
@@ -32,7 +31,14 @@ chrome_opts.add_argument("--window-size=1920,1080")
 
 def init_driver():
     logger.info("Initializing headless Chrome driver")
-    service = ChromeService(ChromeDriverManager().install())
+    # If your Chrome and ChromeDriver versions mismatch, set CHROMEDRIVER_VERSION env var to your Chrome major version (e.g. "135.0.7049.115").
+    chrome_driver_version = os.getenv("CHROMEDRIVER_VERSION")
+    if chrome_driver_version:
+        logger.info("Using ChromeDriver version %s", chrome_driver_version)
+        driver_path = ChromeDriverManager(version=chrome_driver_version).install()
+    else:
+        driver_path = ChromeDriverManager().install()
+    service = ChromeService(driver_path)
     driver = webdriver.Chrome(service=service, options=chrome_opts)
     driver.implicitly_wait(5)
     return driver
