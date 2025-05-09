@@ -2,45 +2,45 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:ics.py - http://git.io/lLljaA
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250514
-DESCRIPTION:Meal 🍽️: Bibimbab\n\nIngredients 🛒:\n<strong>Rice</strong><br>&bull\; 3 cups short grain rice<br><br><strong>Meat</strong><br>&bull\; 8 ounces thinly sliced tender beef (rib eye\, sirloin\, etc. or ground beef)<br>&bull\; 1½ tablespoons soy sauce<br>&bull\; 2 teaspoons sugar<br>&bull\; 2 teaspoons sesame oil<br>&bull\; 2 teaspoons rice wine<br>&bull\; 1 teaspoon minced garlic<br>&bull\; 1 tablespoon chopped scallion<br>&bull\; pepper to taste<br><br><strong>Vegetables and Eggs</strong><br>&bull\; 8 ounces mung bean sprouts (sukju\, 숙주) or soybean sprouts (kongnamul\, 콩나물)<br>&bull\; 1 bunch spinach\, about 8 ounces<br>&bull\; 2 small cucumbers\, about 5 ounces<br>&bull\; 4 ounces mushrooms (shiitake\, white\, cremini\, etc.)<br>&bull\; 2 medium carrots\, about 5 ounces<br>&bull\; 1 ½ teaspoons minced garlic\, divided<br>&bull\; 3 tablespoons chopped scallion\, divided<br>&bull\; sesame oil<br>&bull\; sesame seeds<br>&bull\; salt<br>&bull\; 4 eggs - optional<br>&bull\; cooking oil<br><br><strong>More Vegetable Options</strong><br>&bull\; 8 ounces Kongnamul (soybean sprouts)<br>&bull\; 10 ounces mu (Korean radish)<br><br><strong>Bibimbap Sauce</strong><br>&bull\; 4 tablespoons gochujang<br>&bull\; 2 teaspoons sugar - adjust to taste\, 1-3 teaspoons<br>&bull\; 1 tablespoon sesame oil<br>&bull\; 1 tablespoon water
-SUMMARY:Wednesday: Bibimbab
-UID:f8256df8-1b60-48cb-9eca-c5c484c9c22c@f825.org
-END:VEVENT
-BEGIN:VEVENT
 DTSTART;VALUE=DATE:20250516
-DESCRIPTION:Meal 🍽️: Order out Thai\n\nIngredients 🛒:\nOrder out or ingredients not available
-SUMMARY:Friday: Order out Thai
-UID:9a114aa6-5ad7-4793-98e1-c09b2455182d@9a11.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250515
-DESCRIPTION:Meal 🍽️: Kimchi jjigae\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 2 cups packed bite size kimchi fully fermented<br>&bull\; 4 ounces fresh pork belly or other pork meat with some fat or other protein choice<br>&bull\; 1 - 3 teaspoons gochugaru - adjust to taste or omit<br>&bull\; 1 teaspoon minced garlic<br>&bull\; 1 tablespoon cooking oil<br>&bull\; ½ cup juice from kimchi if available<br>&bull\; 6 ounces tofu<br>&bull\; 2 scallions<br>&bull\; salt (or a little bit of soup soy sauce or regular soy sauce) and pepper to taste
-SUMMARY:Thursday: Kimchi jjigae
-UID:69e44c0d-12e0-4598-8fef-03b3f3e6389f@69e4.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250513
 DESCRIPTION:Meal 🍽️: Pad woon sen\n\nIngredients 🛒:\nOrder out or ingredients not available
-SUMMARY:Tuesday: Pad woon sen
-UID:f9f853ce-4667-4c87-8df3-f654da74bde1@f9f8.org
-END:VEVENT
-BEGIN:VEVENT
-DTSTART;VALUE=DATE:20250512
-DESCRIPTION:Meal 🍽️: Yangzhou fried rice\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 5 cups cooked white rice (about 2 cups uncooked\; preferably made the day before and refrigerated)<br>&bull\; 3 tablespoons cooking oil<br>&bull\; 2 carrots (diced)<br>&bull\; 1/3 cup peas (frozen or fresh)<br>&bull\; 10 shrimp (deveined\, deshelled\, no tail\; cut into small pieces)<br>&bull\; 3 eggs<br>&bull\; ½ cup char siu pork (or Chinese sausage\; cut into small pieces)<br>&bull\; 2 scallions (chopped)<br>&bull\; 1½ tablespoons soy sauce<br>&bull\; Pepper (to taste)<br>&bull\; Salt (to taste)
-SUMMARY:Monday: Yangzhou fried rice
-UID:cb0aa72a-e069-46d3-9a2f-afdafe3fae4c@cb0a.org
+SUMMARY:Friday: Pad woon sen
+UID:116aa808-9940-4589-8b50-f900488da131@116a.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20250517
-DESCRIPTION:Meal 🍽️: Gyeran mari\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 4 - 5 large eggs<br>&bull\; 1 cup anchovy broth (or water or dashima broth) adjust to taste<br>&bull\; 1½ teaspoons salted shrimp (saeujeot) or 3/4 teaspoon salt (or fish sauce)<br>&bull\; 2 tablespoons chopped scallion<br>&bull\; 1 teaspoon sesame oil\, divided - optional<br>&bull\; ½ teaspoon sesame seeds - optional
-SUMMARY:Saturday: Gyeran mari
-UID:dc5ff24a-07e3-424a-8220-19388f3fa40c@dc5f.org
+DESCRIPTION:Meal 🍽️: Pad woon sen\n\nIngredients 🛒:\nOrder out or ingredients not available
+SUMMARY:Saturday: Pad woon sen
+UID:f3b5ec26-9ff9-4833-8292-c6134ad62e4e@f3b5.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250513
+DESCRIPTION:Meal 🍽️: Buddha bowl\n\nIngredients 🛒:\n<strong>Bowl</strong><br>&bull\; 2 cups cooked rice<br>&bull\; 1 avocado<br>&bull\; 2 red bell peppers<br>&bull\; 3 cups chopped kale<br>&bull\; 4 green onions chopped<br>&bull\; 1 tablespoon olive oil<br>&bull\; Optional: chopped peanuts for garnish<br><br><strong>Tofu</strong><br>&bull\; 1 block extra firm tofu<br>&bull\; 1 tablespoon low sodium tamari or soy sauce<br>&bull\; 1 teaspoon toasted sesame oil<br>&bull\; 1 tablespoon maple syrup or honey<br>&bull\; 2 tablespoons corn starch<br>&bull\; 2 tablespoons gluten free plain breadcrumbs or regular<br>&bull\; ½ cup peanut sauce
+SUMMARY:Tuesday: Buddha bowl
+UID:7857e133-2fca-4c28-9877-e81ed9f69241@7857.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250514
+DESCRIPTION:Meal 🍽️: Order out Mexican\n\nIngredients 🛒:\nOrder out or ingredients not available
+SUMMARY:Wednesday: Order out Mexican
+UID:2f558d65-8c44-4c69-9304-0e4561fa3824@2f55.org
 END:VEVENT
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:20250518
 DESCRIPTION:Meal 🍽️: Yangzhou fried rice\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 5 cups cooked white rice (about 2 cups uncooked\; preferably made the day before and refrigerated)<br>&bull\; 3 tablespoons cooking oil<br>&bull\; 2 carrots (diced)<br>&bull\; 1/3 cup peas (frozen or fresh)<br>&bull\; 10 shrimp (deveined\, deshelled\, no tail\; cut into small pieces)<br>&bull\; 3 eggs<br>&bull\; ½ cup char siu pork (or Chinese sausage\; cut into small pieces)<br>&bull\; 2 scallions (chopped)<br>&bull\; 1½ tablespoons soy sauce<br>&bull\; Pepper (to taste)<br>&bull\; Salt (to taste)
 SUMMARY:Sunday: Yangzhou fried rice
-UID:cffbd83d-7192-46e1-8a64-50283897761f@cffb.org
+UID:a0908b5e-2385-407d-b8d5-a222fdd89c11@a090.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250515
+DESCRIPTION:Meal 🍽️: Fruit smoothie\n\nIngredients 🛒:\nOrder out or ingredients not available
+SUMMARY:Thursday: Fruit smoothie
+UID:058c055e-4be4-49fc-b8aa-661913f85bd9@058c.org
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20250512
+DESCRIPTION:Meal 🍽️: Spicy ramen\n\nIngredients 🛒:\n<strong>Main Ingredients</strong><br>&bull\; 2 Beef Steaks\, cubed<br>&bull\; Salt and Pepper<br>&bull\; 2 teaspoon Sesame Oil<br>&bull\; 3 tablespoons Kimchee Base or Gochujang Sauce<br>&bull\; 2 tablespoons Soy Sauce<br>&bull\; ¼ cup Scallions\, chopped<br>&bull\; 1½ cups Water<br>&bull\; 1 Package Instant Ramen noodles<br>&bull\; Black sesame seeds
+SUMMARY:Monday: Spicy ramen
+UID:9ad26979-77ac-4ee0-9b5d-7df4eda3d48b@9ad2.org
 END:VEVENT
 END:VCALENDAR

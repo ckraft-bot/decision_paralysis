@@ -7,6 +7,8 @@ import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+import meal_planner_email
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -77,23 +79,58 @@ def sign_in(driver):
 
 def clear_cart(driver):
     logger.info("Clearing cart.")
-    driver.find_element(By.ID, "hf-cart-flyout").click()
-    time.sleep(2)
-    for remove in driver.find_elements(By.CLASS_NAME, "remove-item"):
-        remove.click()
+    try:
+        driver.find_element(By.ID, "hf-cart-flyout").click()
+        time.sleep(2)
+        for remove in driver.find_elements(By.CLASS_NAME, "remove-item"):
+            remove.click()
+    except NoSuchElementException:
+        logger.warning("Cart already empty or cart button not found.")
 
 
-def get_grocery_list():
-    logger.info("Fetching grocery list.")
-    return [
-        ("bananas", "5"),
-        ("orange juice", "1"),
-        ("milk", "1"),
-    ]
+
+def get_grocery_list(ingredients_list):
+    """Simple aggregator for grocery items (could be extended to count quantities)."""
+    grocery_set = set()
+    for item in ingredients_list:
+        grocery_set.add(item.strip())
+    return sorted(grocery_set)
+
+
+def compile_weekly_grocery_list(meal_plan):
+    """Extract all ingredients from the weekly meal plan and generate a clean shopping list."""
+    all_ingredients = []
+
+    # Iterate over each day's entry in the meal plan
+    for day_info in meal_plan.values():
+        ingredients = day_info["Ingredients"]
+
+        # If ingredients are already a list, add them directly
+        if isinstance(ingredients, list):
+            all_ingredients.extend(ingredients)
+
+        # If ingredients are a string (possibly HTML or plain text), process line-by-line
+        elif isinstance(ingredients, str):
+            # Split by <br> if HTML, otherwise use newline
+            lines = ingredients.split("<br>") if "<br>" in ingredients else ingredients.split("\n")
+            
+            for line in lines:
+                # Use regex to extract content after &bull; or • symbol
+                match = re.search(r"(?:&bull;|•)\s*(.+)", line.strip())
+                
+                if match:
+                    # Add the cleaned ingredient text to the list
+                    all_ingredients.append(match.group(1).strip())
+                elif line.strip():
+                    # Fallback: include the line if not empty even if no bullet match
+                    all_ingredients.append(line.strip())
+
+    # Remove duplicates and sort the final list
+    return get_grocery_list(all_ingredients)
 
 
 def shop_items(driver, items):
-    for name, qty in items:
+    for quantity, name in items:
         logger.info(f"Searching for {name}.")
         search_box = driver.find_element(By.ID, "global-search-input")
         search_box.clear()
