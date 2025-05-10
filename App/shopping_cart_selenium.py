@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-import App.meal_planner_email
+import meal_planner_email
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -45,37 +45,36 @@ def open_browser():
 def sign_in(driver):
     logger.info("Navigating directly to login page.")
     driver.get("https://www.walmart.com/account/login")
+
     try:
-        # Wait for the email input by name attribute
-        WebDriverWait(driver, 120).until(
-            EC.visibility_of_element_located((By.NAME, "email"))
+        WebDriverWait(driver, 15).until(
+            EC.visibility_of_element_located((By.ID, "loginId"))
         )
     except Exception:
-        logger.error("Login page did not load or email field not found. Page title: %s", driver.title)
-        # optionally dump a snippet of page source for debugging
-        snippet = driver.page_source[:200]
-        logger.debug("Page source snippet: %s", snippet)
+        logger.error("Login page did not load properly.")
         raise
 
-    email_field = driver.find_element(By.NAME, "email")
-    password_field = driver.find_element(By.NAME, "password")
+    email_field = driver.find_element(By.ID, "loginId")
+    password_field = driver.find_element(By.ID, "password")
+
     logger.info("Entering credentials.")
     email_field.clear()
     email_field.send_keys(WALMART_USERNAME)
     password_field.clear()
     password_field.send_keys(WALMART_PASSWORD)
 
-    # Attempt to click sign-in button if present, else submit via form
     try:
-        signin_btn = driver.find_element(By.XPATH, "//button[@type='submit' and (contains(., 'Sign in') or contains(., 'Log in'))]")
+        signin_btn = driver.find_element(By.CSS_SELECTOR, "button[data-automation-id='signin-submit-btn']")
         signin_btn.click()
-    except Exception:
-        password_field.submit()
+    except Exception as e:
+        logger.error("Failed to locate the 'Sign in' button.")
+        raise
 
-    logger.info("Login submitted, waiting for search input on homepage.")
+    # Wait for the homepage search box (indicating we're logged in)
     WebDriverWait(driver, 15).until(
         EC.presence_of_element_located((By.ID, "global-search-input"))
     )
+    logger.success("✅ Logged in successfully.")
 
 
 def clear_cart(driver):
@@ -87,7 +86,6 @@ def clear_cart(driver):
             remove.click()
     except NoSuchElementException:
         logger.warning("Cart already empty or cart button not found.")
-
 
 
 def get_grocery_list(ingredients_list):
