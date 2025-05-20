@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from loguru import logger
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
@@ -43,34 +44,52 @@ def open_browser():
 
 
 def sign_in(driver):
-    logger.info("Navigating directly to login page.")
+    logger.info("Navigating to Walmart login page…")
     driver.get("https://www.walmart.com/account/login")
 
-    try:
-        WebDriverWait(driver, 15).until(
-            EC.visibility_of_element_located((By.ID, "loginId"))
-        )
-    except Exception:
-        logger.error("Login page did not load properly.")
-        raise
-
-    email_field = driver.find_element(By.ID, "loginId")
-    password_field = driver.find_element(By.ID, "password")
-
-    logger.info("Entering credentials.")
+    # 1) Wait for / find the email/phone field
+    email_field = WebDriverWait(driver, 15).until(
+        EC.visibility_of_element_located((By.ID, "loginId"))
+    )
+    logger.info("Entering username/email…")
     email_field.clear()
     email_field.send_keys(WALMART_USERNAME)
+
+    # 2) Try clicking the “Continue” or “Next” button if present
+    try:
+        next_btn = driver.find_element(
+            By.CSS_SELECTOR,
+            "button[data-automation-id='login-submit-btn'], button[type='submit']"
+        )
+        next_btn.click()
+        logger.info("Clicked continue; waiting for password field…")
+
+        # 3) Now wait for password input on the second step
+        password_field = WebDriverWait(driver, 15).until(
+            EC.visibility_of_element_located((By.ID, "password"))
+        )
+    except Exception:
+        # if no 2-step flow, maybe email & password are on same page
+        logger.info("Single-step login form detected; finding password field…")
+        password_field = driver.find_element(By.ID, "password")
+
+    # 4) Enter password
+    logger.info("Entering password…")
     password_field.clear()
     password_field.send_keys(WALMART_PASSWORD)
 
+    # 5) Click the final “Sign In” button
     try:
-        signin_btn = driver.find_element(By.CSS_SELECTOR, "button[data-automation-id='signin-submit-btn']")
+        signin_btn = driver.find_element(
+            By.CSS_SELECTOR,
+            "button[data-automation-id='signin-submit-btn'], button[type='submit']"
+        )
         signin_btn.click()
-    except Exception as e:
-        logger.error("Failed to locate the 'Sign in' button.")
+    except NoSuchElementException:
+        logger.error("Could not locate the Sign In button.")
         raise
 
-    # Wait for the homepage search box (indicating we're logged in)
+    # 6) Wait for the homepage (search box) to appear
     WebDriverWait(driver, 15).until(
         EC.presence_of_element_located((By.ID, "global-search-input"))
     )
