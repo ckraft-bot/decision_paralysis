@@ -32,6 +32,7 @@ COOK_OPTIONS = [
     'Buddha bowl',
     #'Eggplant parmesan',  # too long of a prep time
     'Fruit smoothie',
+    'Frances Cabbage',
     'Gamja Bokkeum',
     'Gyeran mari',
     'Japchae',

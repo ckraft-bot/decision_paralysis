@@ -3,3 +3,4 @@ PyWhatKit_DB.txt
 credentials.json
 token.json
 .env
+walmart_cart.log
