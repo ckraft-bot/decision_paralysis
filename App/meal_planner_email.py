@@ -53,31 +53,6 @@ COOK_OPTIONS = [
     'Yangchun noodles',
 ]
 
-COOK_OPTIONS = [
-    'Bibimbab',
-    'Buddha bowl',
-    #'Eggplant parmesan',  # too long of a prep time
-    'Frances Cabbage',
-    'Fruit smoothie',
-    'Gamja Bokkeum',
-    'Gyeran mari',
-    # 'Japchae',  # too long of a prep time
-    'Kimchi jjigae',
-    'Kimchi fried rice',
-    'Kimbap bowl',
-    'Mandoo',
-    'Omurice',
-    'Pad woon sen',
-    'Pajun',
-    'Rice & seaweed',
-    'Shrimp tacos',
-    'Spicy ramen',
-    'Tilapia & baked vegetables',
-    'Tofu jorim',
-    'Tomato and egg',
-    'Yangzhou fried rice',
-    'Yangchun noodles',
-]
 
 INGREDIENTS = {
     "Bibimbab": {
@@ -396,7 +371,7 @@ def format_ingredients_html(ingredients):
     """Format ingredients as HTML for email clients."""
     if isinstance(ingredients, dict):
         return "<br><br>".join([
-            f"<strong>{section}</strong><br>" + "<br>".join([f"&bull; {item}" for item in items])
+            f"<em>{section}</em><br>" + "<br>".join([f"&bull; {item}" for item in items])
             for section, items in ingredients.items()
         ])
     
@@ -532,7 +507,7 @@ def main():
     logger.debug("Meal plan dict: %s", meal_plan_dict)
 
     meal_plan_output = "\n\n".join(
-        f"{day}:\nMeal: {details['Meal']}\nIngredients:\n{details['Ingredients']}"
+        f"<strong>{day}</strong>:\nMeal: {details['Meal']}\nIngredients:\n{details['Ingredients']}"
         for day, details in meal_plan_dict.items()
     )
 
