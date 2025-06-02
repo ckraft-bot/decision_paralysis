@@ -368,14 +368,16 @@ DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturda
 
 
 def format_ingredients_html(ingredients):
-    """Format ingredients as HTML for email clients."""
+    """Format ingredients as plain text for calendar descriptions."""
     if isinstance(ingredients, dict):
-        return "<br><br>".join([
-            f"<em>{section}</em><br>" + "<br>".join([f"&bull; {item}" for item in items])
+        return "\n\n".join([
+            f"{section.upper()}:\n" + "\n".join([f"- {item}" for item in items])
             for section, items in ingredients.items()
         ])
     
-    return ingredients.replace("\n", "<br>")
+    # Fallback for string input
+    return ingredients.replace("<br>", "\n").replace("&bull;", "-").replace("&nbsp;", " ").strip()
+
 
 def generate_meal_plan_dict():
     """Generate a weekly meal plan as a dictionary with meals and corresponding ingredients."""
