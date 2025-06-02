@@ -27,6 +27,7 @@ SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
 SUBJECT = "Weekly Meal Plan"
 
+
 COOK_OPTIONS = [
     'Bibimbab',
     'Buddha bowl',
@@ -353,6 +354,7 @@ INGREDIENTS = {
     },
 }
 
+
 ORDER_OUT_OPTIONS = [
     'Order out Chinese',
     'Order out Fast food',
@@ -364,8 +366,8 @@ ORDER_OUT_OPTIONS = [
     'Order out Thai',
 ]
 
-DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
+DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 
 def generate_meal_plan_dict():
@@ -448,7 +450,6 @@ def generate_ical(meal_plan_with_ingredients, start_date=None):
     # with open(ics_filename, 'w') as my_file:
         my_file.writelines(cal)
     
-    #print(f"iCal file '{ics_filename}' generated successfully!")
     logger.info("Generated iCal file %s", ics_filename)
 
     return ics_filename
@@ -499,10 +500,8 @@ def send_email(meal_plan, ical_filename):
             server.login(EMAIL_USERNAME, EMAIL_PASSWORD)
             server.sendmail(EMAIL_USERNAME, receiver_email, msg.as_string())
             logger.info("Email sent to %s", receiver_email)
-        # print(f"Email sent to {receiver_email}")
     except smtplib.SMTPException as e:
         logger.error("Failed to send email: %s", e, exc_info=True)
-        # print(f"Failed to send email: {e}")
 
 
 def main():
