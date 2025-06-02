@@ -367,17 +367,6 @@ ORDER_OUT_OPTIONS = [
 DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 
-def format_ingredients_html(ingredients):
-    """Format ingredients as plain text for calendar descriptions."""
-    if isinstance(ingredients, dict):
-        return "\n\n".join([
-            f"{section.upper()}:\n" + "\n".join([f"- {item}" for item in items])
-            for section, items in ingredients.items()
-        ])
-    
-    # Fallback for string input
-    return ingredients.replace("<br>", "\n").replace("&bull;", "-").replace("&nbsp;", " ").strip()
-
 
 def generate_meal_plan_dict():
     """Generate a weekly meal plan as a dictionary with meals and corresponding ingredients."""
@@ -415,6 +404,18 @@ def get_next_week_monday(start_from=None):
     return next_week_monday
 
 
+def format_ingredients_html(ingredients):
+    """Format ingredients as plain text for calendar descriptions."""
+    if isinstance(ingredients, dict):
+        return "\n\n".join([
+            f"{section.upper()}:\n" + "\n".join([f"- {item}" for item in items])
+            for section, items in ingredients.items()
+        ])
+    
+    # Fallback for string input
+    return ingredients.replace("<br>", "\n").replace("&bull;", "-").replace("&nbsp;", " ").strip()
+
+
 def generate_ical(meal_plan_with_ingredients, start_date=None):
     """
     Generates an iCal file from the meal plan.
@@ -438,7 +439,8 @@ def generate_ical(meal_plan_with_ingredients, start_date=None):
         event.name = f"{day}: {meal}"
         event.begin = event_date.isoformat()
         event.make_all_day()
-        event.description = f"Meal 🍽️: {meal}\n\nIngredients 🛒:\n{ingredients}"
+        formatted_ingredients = format_ingredients_html(ingredients)
+        event.description = f"Meal 🍽️: {meal}\n\nIngredients 🛒:\n\n{formatted_ingredients}"
         cal.events.add(event)
     
     ics_filename = "meal_plan.ics"
