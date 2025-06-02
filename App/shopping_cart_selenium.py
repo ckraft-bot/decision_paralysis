@@ -36,65 +36,21 @@ def open_browser():
     options = uc.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--disable-extensions")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--incognito")
-    options.add_argument("--start-maximized")
-    # Disable images and enable stealth to reduce CAPTCHA risk
-    prefs = {"profile.managed_default_content_settings.images": 2}
-    options.add_experimental_option("prefs", prefs)
-
-    driver = uc.Chrome(version_main=int(os.getenv("CHROME_VERSION", "135")), options=options, headless=False, use_subprocess=True)
+    options.add_argument("--user-data-dir=/tmp/chrome_user_data")
+    options.add_argument("--profile-directory=Default")
+    driver = uc.Chrome(version_main=int(os.getenv("CHROME_VERSION", "135")), options=options)
+    driver.maximize_window()
     driver.implicitly_wait(10)
     driver.get("https://www.walmart.com")
     logger.success("✅ Browser opened and navigated to Walmart homepage.")
     return driver
 
 def sign_in(driver):
-    logger.info("Navigating to Walmart login page…")
-    driver.get("https://www.walmart.com/account/login")
-
-    email_field = WebDriverWait(driver, 15).until(
-        EC.visibility_of_element_located((By.ID, "loginId"))
-    )
-    logger.info("Entering username/email…")
-    email_field.clear()
-    email_field.send_keys(WALMART_USERNAME)
-
-    try:
-        next_btn = driver.find_element(
-            By.CSS_SELECTOR,
-            "button[data-automation-id='login-submit-btn'], button[type='submit']"
-        )
-        next_btn.click()
-        logger.info("Clicked continue; waiting for password field…")
-        password_field = WebDriverWait(driver, 15).until(
-            EC.visibility_of_element_located((By.ID, "password"))
-        )
-    except Exception:
-        logger.info("Single-step login form detected; finding password field…")
-        password_field = driver.find_element(By.ID, "password")
-
-    logger.info("Entering password…")
-    password_field.clear()
-    password_field.send_keys(WALMART_PASSWORD)
-
-    try:
-        signin_btn = driver.find_element(
-            By.CSS_SELECTOR,
-            "button[data-automation-id='signin-submit-btn'], button[type='submit']"
-        )
-        signin_btn.click()
-        logger.info("Sign in button clicked.")
-    except NoSuchElementException:
-        logger.error("Could not locate the Sign In button.")
-        raise
-
-    WebDriverWait(driver, 15).until(
+    logger.info("Assuming session is authenticated via cookies or manual login.")
+    WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.ID, "global-search-input"))
     )
-    logger.success("✅ Logged in successfully.")
+    logger.success("✅ Browser session appears logged in.")
 
 def clear_cart(driver):
     logger.info("Clearing cart.")
@@ -110,12 +66,14 @@ def clear_cart(driver):
         logger.warning("Cart already empty or cart button not found.")
 
 def shop_items(driver, items):
+    driver.get("https://www.walmart.com/cp/food/976759")
     for i, name in enumerate(items, 1):
-        logger.info(f"({i}/{len(items)}) Searching for '{name}'...")
+        logger.info(f"({i}/{len(items)}) Searching for '{name}' on food page...")
+
         search_box = driver.find_element(By.ID, "global-search-input")
         search_box.clear()
         search_box.send_keys(name)
-        search_box.submit()
+        search_box.send_keys(Keys.RETURN)
 
         try:
             WebDriverWait(driver, 10).until(
@@ -124,17 +82,14 @@ def shop_items(driver, items):
             logger.info(f"Search results loaded for '{name}'.")
         except Exception:
             logger.warning(f"No search results for '{name}'. Skipping.")
-            driver.get("https://www.walmart.com")
+            driver.get("https://www.walmart.com/cp/food/976759")
             continue
 
         products = driver.find_elements(By.CSS_SELECTOR, "div[data-testid='list-view'] div[class*='search-result-product']")
         if not products:
-            logger.warning(f"No products found for '{name}'. Dumping HTML for debugging...")
-            with open("debug.html", "w", encoding="utf-8") as f:
-                f.write(driver.page_source)
-            driver.get("https://www.walmart.com")
+            logger.warning(f"No products found for '{name}'. Skipping.")
+            driver.get("https://www.walmart.com/cp/food/976759")
             continue
-
 
         try:
             logger.info(f"Clicking first result for '{name}'...")
@@ -149,8 +104,8 @@ def shop_items(driver, items):
         except Exception as e:
             logger.warning(f"Could not add '{name}' to cart: {e}")
 
-        logger.info("Returning to homepage...")
-        driver.get("https://www.walmart.com")
+        logger.info("Returning to food page...")
+        driver.get("https://www.walmart.com/cp/food/976759")
         WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.ID, "global-search-input"))
         )
