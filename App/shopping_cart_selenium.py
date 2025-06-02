@@ -107,55 +107,21 @@ def clear_cart(driver):
         logger.warning("Cart already empty or cart button not found.")
 
 
-def get_grocery_list(ingredients_list):
-    """Simple aggregator for grocery items (could be extended to count quantities)."""
-    grocery_set = set()
-    for item in ingredients_list:
-        grocery_set.add(item.strip())
-    return sorted(grocery_set)
-
-
-def compile_weekly_grocery_list(meal_plan):
-    """Extract all ingredients from the weekly meal plan and generate a clean shopping list."""
-    all_ingredients = []
-
-    # Iterate over each day's entry in the meal plan
-    for day_info in meal_plan.values():
-        ingredients = day_info["Ingredients"]
-
-        # If ingredients are already a list, add them directly
-        if isinstance(ingredients, list):
-            all_ingredients.extend(ingredients)
-
-        # If ingredients are a string (possibly HTML or plain text), process line-by-line
-        elif isinstance(ingredients, str):
-            # Split by <br> if HTML, otherwise use newline
-            lines = ingredients.split("<br>") if "<br>" in ingredients else ingredients.split("\n")
-            
-            for line in lines:
-                # Use regex to extract content after &bull; or • symbol
-                match = re.search(r"(?:&bull;|•)\s*(.+)", line.strip())
-                
-                if match:
-                    # Add the cleaned ingredient text to the list
-                    all_ingredients.append(match.group(1).strip())
-                elif line.strip():
-                    # Fallback: include the line if not empty even if no bullet match
-                    all_ingredients.append(line.strip())
-
-    # Remove duplicates and sort the final list
-    return get_grocery_list(all_ingredients)
-
+# def get_grocery_list(ingredients_list):
+#     """Simple aggregator for grocery items (could be extended to count quantities)."""
+#     grocery_set = set()
+#     for item in ingredients_list:
+#         grocery_set.add(item.strip())
+#     return sorted(grocery_set)
 
 def shop_items(driver, items):
-    for quantity, name in items:
+    for name in items:
         logger.info(f"Searching for {name}.")
         search_box = driver.find_element(By.ID, "global-search-input")
         search_box.clear()
         search_box.send_keys(name)
         search_box.submit()
 
-        # Wait for product grid items
         try:
             WebDriverWait(driver, 10).until(
                 EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".search-result-gridview-item"))
@@ -171,36 +137,76 @@ def shop_items(driver, items):
             driver.get("https://www.walmart.com")
             continue
 
-        # Click the first product link
-        products[0].find_element(By.TAG_NAME, "a").click()
+        try:
+            products[0].find_element(By.TAG_NAME, "a").click()
 
-        # Wait for product page to load and Add to Cart button to be clickable
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Add to cart') or contains(text(), 'Add to Cart')]"))
-        )
-        add_btn = driver.find_element(By.XPATH, "//button[contains(text(), 'Add to cart') or contains(text(), 'Add to Cart')]")
-        add_btn.click()
-        logger.info(f"{name} added to cart.")
+            WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Add to cart') or contains(text(), 'Add to Cart')]"))
+            )
+            add_btn = driver.find_element(By.XPATH, "//button[contains(text(), 'Add to cart') or contains(text(), 'Add to Cart')]")
+            add_btn.click()
+            logger.info(f"{name} added to cart.")
+        except Exception as e:
+            logger.warning(f"Could not add {name} to cart: {e}")
 
-        # Return to homepage for next iteration
         driver.get("https://www.walmart.com")
         WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.ID, "global-search-input"))
         )
 
 
+# def compile_weekly_grocery_list(meal_plan):
+#     """Extract all ingredients from the weekly meal plan and generate a clean shopping list."""
+#     all_ingredients = []
+
+#     # Iterate over each day's entry in the meal plan
+#     for day_info in meal_plan.values():
+#         ingredients = day_info["Ingredients"]
+
+#         # If ingredients are already a list, add them directly
+#         if isinstance(ingredients, list):
+#             all_ingredients.extend(ingredients)
+
+#         # If ingredients are a string (possibly HTML or plain text), process line-by-line
+#         elif isinstance(ingredients, str):
+#             # Split by <br> if HTML, otherwise use newline
+#             lines = ingredients.split("<br>") if "<br>" in ingredients else ingredients.split("\n")
+            
+#             for line in lines:
+#                 # Use regex to extract content after &bull; or • symbol
+#                 match = re.search(r"(?:&bull;|•)\s*(.+)", line.strip())
+                
+#                 if match:
+#                     # Add the cleaned ingredient text to the list
+#                     all_ingredients.append(match.group(1).strip())
+#                 elif line.strip():
+#                     # Fallback: include the line if not empty even if no bullet match
+#                     all_ingredients.append(line.strip())
+
+#     # Remove duplicates and sort the final list
+#     return get_grocery_list(all_ingredients)
+
+
 def main():
+    logger.info("Using test grocery list for Walmart automation...")
+
+    fake_ingredients = [
+        "eggs",
+        "milk",
+        "spinach",
+        "olive oil",
+        "garlic",
+        "bananas",
+        "orange juice"
+    ]
+
     driver = open_browser()
     try:
         sign_in(driver)
         clear_cart(driver)
-        shop_items(driver, get_grocery_list())
+        shop_items(driver, fake_ingredients)
     except Exception:
         logger.exception("Error during automation.")
     finally:
         logger.info("Closing browser.")
         driver.quit()
-
-
-if __name__ == "__main__":
-    main()
