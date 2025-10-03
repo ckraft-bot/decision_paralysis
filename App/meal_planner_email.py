@@ -30,8 +30,8 @@ SUBJECT = "Weekly Meal Plan"
 
 COOK_OPTIONS = [
     'Bibimbab',
-    'Buddha bowl',
-    #'Eggplant parmesan',  # too long of a prep time
+    # 'Buddha bowl',
+    # 'Eggplant parmesan',  # too long of a prep time
     'Fruit smoothie',
     'Frances Cabbage',
     'Gamja Bokkeum',
@@ -46,6 +46,8 @@ COOK_OPTIONS = [
     'Pajun',
     'Rice & seaweed',
     'Shrimp tacos',
+    'Smashed Cucumber salad',
+    'Sour and spicy shredded potato',
     'Spicy ramen',
     'Tilapia & baked vegetables',
     'Tofu jorim',
@@ -286,6 +288,32 @@ INGREDIENTS = {
             "2 limes, cut into wedges, or as needed"
         ]
     },
+    "Smashed Cucumber Salad": {
+        "Main Ingredients": [
+            "2 English cucumbers)",
+            "1 teaspoon salt",
+            "2½ teaspoons sugar",
+            "2 teaspoons sesame oil",
+            "3 teaspoons light soy sauce",
+            "1½ tablespoons rice vinegar",
+            "2-4 cloves garlic (finely chopped)",
+            "1-2 teaspoons chili oil (optional)",
+            "2 teaspoons toasted sesame seeds",
+            "1/4 cup chopped cilantro"
+        ]
+    },
+    "Spicy Shredded Potato": {
+        "Main Ingredients": [
+            "1 tablespoon cooking oil",
+            "2 medium-sized potatoes",
+            "3 dried chili, deseeded",
+            "½ teaspoon Sichuan peppercorns",
+            "2 fresh chili, sliced",
+            "3 cloves garlic, sliced",
+            "1 teaspoon black rice vinegar",
+            "1/4 teaspoon salt (or to taste)"
+        ]
+    },
     "Spicy ramen": {
         "Main Ingredients": [
             "2 Beef Steaks, cubed",
@@ -358,7 +386,7 @@ INGREDIENTS = {
 ORDER_OUT_OPTIONS = [
     'Order out Chinese',
     'Order out Fast food',
-    'Order out Indian',
+    # 'Order out Indian',
     'Order out Italian',
     'Order out Japanese',
     'Order out Korean',
