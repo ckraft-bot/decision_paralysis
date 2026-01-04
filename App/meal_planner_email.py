@@ -28,9 +28,9 @@ SMTP_PORT = 465
 SUBJECT = "Weekly Meal Plan"
 
 COOK_OPTIONS = [
-    'Bibimbab',
+    # 'Bibimbab',
     # 'Buddha bowl',
-    # 'Eggplant parmesan',  # too long of a prep time
+    # 'Eggplant parmesan',  
     'Fruit smoothie',
     'Frances Cabbage',
     'Gamja Bokkeum',
@@ -41,6 +41,7 @@ COOK_OPTIONS = [
     'Kimbap bowl',
     'Mandoo',
     'Omurice',
+    "Lemon noodles"
     'Pad woon sen',
     'Pajun',
     'Rice & seaweed',
@@ -235,6 +236,20 @@ INGREDIENTS = {
             "1 teaspoon soy sauce",
             "½ teaspoon sugar",
             "½ teaspoon sesame oil"
+        ]
+    },
+    "Lemon noodles": {
+        "Main Ingredients": [
+            "2 rolls of egg noodles",
+            "Shanghainese bok choy",
+            "1 lemon",
+            "2 eggs",
+            "tofu",
+            "minced garlic",
+            "soy suace",
+            "salt",
+            "black pepper",
+            "oil"
         ]
     },
     "Omurice": {
