@@ -38,6 +38,7 @@ jobs:
     env:
       email_password: ${{ secrets.EMAIL_PASSWORD }} 
       email_username: ${{ secrets.EMAIL_USERNAME }}
+      gram_email: ${{ secrets.GRAM_EMAIL }} 
 
     steps:
       - uses: actions/checkout@v3
