@@ -261,10 +261,12 @@ def send_email(meal_plan, ical_filename):
     EMAIL_USERNAME = os.environ['email_username']
     EMAIL_PASSWORD = os.environ['email_password']
 
+    GRAM_EMAIL = os.environ['gram_email']
+
     if not EMAIL_USERNAME or not EMAIL_PASSWORD:
         raise ValueError("Email credentials not found. Ensure they are set properly in GitHub Actions.")
 
-    receiver_email = EMAIL_USERNAME  # or set to a different recipient if desired
+    receiver_email = GRAM_EMAIL  # or set to a different recipient if desired
     body = f"""
     <html>
         <body>
@@ -313,7 +315,7 @@ def main():
     logger.debug("Meal plan dict: %s", meal_plan_dict)
 
     meal_plan_output = "\n\n".join(
-        f"<strong>{day}</strong>:\nMeal: {details['Meal']}\nIngredients:\n{details['Suggested Ingredients']}"
+        f"<strong>{day}</strong>:\nMeal: {details['Meal']}\nSuggested Ingredients:\n{details['Suggested Ingredients']}"
         for day, details in meal_plan_dict.items()
     )
 
@@ -321,7 +323,7 @@ def main():
     logger.debug("iCal filename: %s", ical_filename)
 
     send_email(meal_plan_output, ical_filename)
-    logger.info("Finished sending meal-plan email")
+    logger.info("Finished sending meal-plan email to gram")
 
 
 if __name__ == "__main__":
