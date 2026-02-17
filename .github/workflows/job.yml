@@ -11,32 +11,44 @@ on:
   schedule:
     - cron: "0 3 * * 6"
 
-env:
-  email_password: ${{ secrets.EMAIL_PASSWORD }} # env_var: secrets.REPO_SECRETS
-  email_username: ${{ secrets.EMAIL_USERNAME }} # env_var: secrets.REPO_SECRETS
-
 jobs:
-  test:
+  my_job:
     runs-on: ubuntu-latest
+    env:
+      email_password: ${{ secrets.EMAIL_PASSWORD }} # env_var: secrets.REPO_SECRETS
+      email_username: ${{ secrets.EMAIL_USERNAME }} # env_var: secrets.REPO_SECRETS
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3  # Ensure code is checked out
+      - uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4  # Use the latest version of setup-python
-      with:
-        python-version: '3.10.16'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.16'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    
-    - name: List files in the repository (recursive)
-      run: |
-        ls -alR  # Lists all files to check the directory structure
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Run app
-      run: |
-        python App/meal_planner_email.py 
+      - run: python App/meal_planner_email.py
+
+
+  gram_job:
+    runs-on: ubuntu-latest
+    env:
+      email_password: ${{ secrets.EMAIL_PASSWORD }} 
+      email_username: ${{ secrets.EMAIL_USERNAME }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.16'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - run: python App/gram_meal_planner_email.py
