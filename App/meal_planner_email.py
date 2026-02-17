@@ -41,7 +41,7 @@ COOK_OPTIONS = [
     'Kimbap bowl',
     'Mandoo',
     'Omurice',
-    "Lemon noodles"
+    "Lemon noodles",
     'Pad woon sen',
     'Pajun',
     'Rice & seaweed',
@@ -399,11 +399,11 @@ INGREDIENTS = {
 ORDER_OUT_OPTIONS = [
     'Order out Chinese',
     'Order out Fast food',
-    # 'Order out Indian',
+    'Order out Indian',
     'Order out Italian',
-    'Order out Japanese',
+    'Order out Sushi',
     'Order out Korean',
-    'Order out Mexican',
+    'Order out Tacos',
     'Order out Thai',
 ]
 
