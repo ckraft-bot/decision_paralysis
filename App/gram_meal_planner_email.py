@@ -235,7 +235,7 @@ def generate_ical(meal_plan_with_ingredients, start_date=None):
         event_date = start_date + timedelta(days=idx)
         details = meal_plan_with_ingredients.get(day, {})
         meal = details.get("Meal", "Meal not set")
-        ingredients = details.get("Ingredients", "")
+        ingredients = details.get("Suggested Ingredients", "")
         
         event = Event()
         event.name = f"{day}: {meal}"
@@ -313,7 +313,7 @@ def main():
     logger.debug("Meal plan dict: %s", meal_plan_dict)
 
     meal_plan_output = "\n\n".join(
-        f"<strong>{day}</strong>:\nMeal: {details['Meal']}\nIngredients:\n{details['Ingredients']}"
+        f"<strong>{day}</strong>:\nMeal: {details['Meal']}\nIngredients:\n{details['Suggested Ingredients']}"
         for day, details in meal_plan_dict.items()
     )
 
