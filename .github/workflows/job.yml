@@ -1,0 +1,55 @@
+name: Meal Planner Job
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on PRs
+  # pull_request:
+  #   branches:
+  #     - main
+
+  # Triggers the workflow 3 am every Saturday
+  schedule:
+    - cron: "0 3 * * 6"
+
+jobs:
+  my_job:
+    runs-on: ubuntu-latest
+    env:
+      email_password: ${{ secrets.EMAIL_PASSWORD }} # env_var: secrets.REPO_SECRETS
+      email_username: ${{ secrets.EMAIL_USERNAME }} # env_var: secrets.REPO_SECRETS
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.16'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - run: python App/meal_planner_email.py
+
+
+  gram_job:
+    runs-on: ubuntu-latest
+    env:
+      email_password: ${{ secrets.EMAIL_PASSWORD }} 
+      email_username: ${{ secrets.EMAIL_USERNAME }}
+      gram_email: ${{ secrets.GRAM_EMAIL }} 
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.16'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - run: python App/gram_meal_planner_email.py
