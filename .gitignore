@@ -1,6 +1,16 @@
-config.py
-PyWhatKit_DB.txt
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Env / secrets
+.env
 credentials.json
 token.json
-.env
-walmart_cart.log
+
+# Logs
+*.log
+
+# App files (optional if generated)
+PyWhatKit_DB.txt
