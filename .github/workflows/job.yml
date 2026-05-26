@@ -7,9 +7,9 @@ on:
   #   branches:
   #     - main
 
-  # Triggers the workflow 3 am every Saturday
+  # Triggers the workflow 3 am every Saturday UTC, that's Friday evening 9:00 or 10:00 pm EST depending on daylight savings
   schedule:
-    - cron: "0 3 * * 6"
+    - cron: "0 3 * * 6" 
 
 jobs:
   my_job:
