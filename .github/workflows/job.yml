@@ -1,13 +1,9 @@
 name: Meal Planner Job
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on PRs
-  # pull_request:
-  #   branches:
-  #     - main
-
-  # Triggers the workflow 3 am every Saturday UTC, that's Friday evening 9:00 or 10:00 pm EST depending on daylight savings
+  pull_request:
+    branches:
+      - main
   schedule:
     - cron: "0 3 * * 6" 
 
@@ -15,13 +11,13 @@ jobs:
   my_job:
     runs-on: ubuntu-latest
     env:
-      email_password: ${{ secrets.EMAIL_PASSWORD }} # env_var: secrets.REPO_SECRETS
-      email_username: ${{ secrets.EMAIL_USERNAME }} # env_var: secrets.REPO_SECRETS
+      email_password: ${{ secrets.EMAIL_PASSWORD }}
+      email_username: ${{ secrets.EMAIL_USERNAME }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10.16'
 
@@ -41,9 +37,9 @@ jobs:
       gram_email: ${{ secrets.GRAM_EMAIL }} 
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10.16'
 
