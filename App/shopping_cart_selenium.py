@@ -38,7 +38,7 @@ WALMART_BASE_URL = "https://www.walmart.com"
 WALMART_LOGIN_URL = f"{WALMART_BASE_URL}/account/login"
 SEARCH_INPUT_ID = "global-search-input"
 
-DEFAULT_LOGIN_TIMEOUT_SECONDS = 600
+DEFAULT_LOGIN_TIMEOUT_SECONDS = 1200
 DEFAULT_ELEMENT_WAIT_SECONDS = 15
 DEFAULT_SEARCH_WAIT_SECONDS = 10
 DEFAULT_HOME_WAIT_SECONDS = 5
@@ -48,6 +48,28 @@ if not WALMART_USERNAME or not WALMART_PASSWORD:
     raise ValueError("WALMART_USERNAME and WALMART_PASSWORD must be set in environment variables.")
 
 NO_INGREDIENTS_TEXT = "Order out or ingredients not available"
+MEASUREMENT_UNITS = {
+    "cup", "cups", "tbsp", "tablespoon", "tablespoons", "tsp", "teaspoon", "teaspoons",
+    "oz", "ounce", "ounces", "lb", "lbs", "pound", "pounds", "g", "kg", "ml", "l",
+    "clove", "cloves", "pack", "package", "bunch", "bunches", "strip", "strips", "sheet", "sheets",
+}
+FRACTION_CHARS = "¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞"
+LEADING_FILLER_WORDS = {"about", "approx", "approximately", "around"}
+SIZE_WORDS = {"small", "medium", "large"}
+QUERY_SYNONYMS = {
+    "scallion": "green onion",
+    "scallions": "green onions",
+    "spring onion": "green onion",
+    "spring onions": "green onions",
+    "gim": "nori seaweed",
+    "nori": "nori seaweed",
+    "gochugaru": "korean red pepper flakes",
+    "danmuji": "pickled radish",
+    "saeujeot": "salted shrimp",
+    "ueong": "burdock root",
+    "char siu": "bbq pork",
+    "mirin": "rice wine",
+}
 
 
 def _is_mfa_challenge_visible(driver: WebDriver) -> bool:
@@ -96,6 +118,15 @@ def _wait_for_logged_in_state(driver: WebDriver, timeout_seconds: int) -> None:
     )
 
 
+def _manual_login_fallback(driver: WebDriver) -> None:
+    """Allow manual login in-browser, then continue once logged in."""
+    logger.warning("Could not locate expected login fields. Please complete login manually in the browser window.")
+    input("After login is complete and Walmart home page loads, press Enter to continue...")
+
+    login_timeout = int(os.getenv("LOGIN_TIMEOUT_SECONDS", str(DEFAULT_LOGIN_TIMEOUT_SECONDS)))
+    _wait_for_logged_in_state(driver, timeout_seconds=login_timeout)
+
+
 def open_browser() -> WebDriver:
     """Create and return an undetected Chrome WebDriver session."""
     logger.info("Opening undetected Chrome…")
@@ -123,9 +154,15 @@ def sign_in(driver: WebDriver) -> None:
     logger.info("Navigating to Walmart login page…")
     driver.get(WALMART_LOGIN_URL)
 
-    email_field = WebDriverWait(driver, DEFAULT_ELEMENT_WAIT_SECONDS).until(
-        EC.visibility_of_element_located((By.ID, "loginId"))
-    )
+    try:
+        email_field = WebDriverWait(driver, DEFAULT_ELEMENT_WAIT_SECONDS).until(
+            EC.visibility_of_element_located((By.ID, "loginId"))
+        )
+    except TimeoutException:
+        _manual_login_fallback(driver)
+        logger.success("Logged in successfully.")
+        return
+
     logger.info("Entering username/email…")
     email_field.clear()
     email_field.send_keys(WALMART_USERNAME)
@@ -143,7 +180,12 @@ def sign_in(driver: WebDriver) -> None:
         )
     except (NoSuchElementException, TimeoutException):
         logger.info("Single-step login form detected; finding password field…")
-        password_field = driver.find_element(By.ID, "password")
+        try:
+            password_field = driver.find_element(By.ID, "password")
+        except NoSuchElementException:
+            _manual_login_fallback(driver)
+            logger.success("Logged in successfully.")
+            return
 
     logger.info("Entering password…")
     password_field.clear()
@@ -186,6 +228,78 @@ def dedupe_grocery_list(ingredients_list: list[str]) -> list[str]:
     return sorted(seen.values())
 
 
+def _normalize_whitespace(text: str) -> str:
+    """Collapse repeated whitespace into single spaces."""
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _is_amount_token(token: str) -> bool:
+    """Return True for amount-like tokens such as 1, 1/2, 4-5, 18oz."""
+    amount_pattern = rf"^[\d{FRACTION_CHARS}./-]+$"
+    amount_with_unit_pattern = r"^[\d./-]+(oz|ounce|ounces|lb|lbs|pound|pounds|g|kg|ml|l)$"
+    token = token.lower().strip(".,")
+    return bool(re.match(amount_pattern, token) or re.match(amount_with_unit_pattern, token))
+
+
+def _apply_query_synonyms(text: str) -> str:
+    """Replace known ingredient aliases with common store search terms."""
+    updated = text
+    for source, target in QUERY_SYNONYMS.items():
+        updated = re.sub(rf"\b{re.escape(source)}\b", target, updated)
+    return _normalize_whitespace(updated)
+
+
+def ingredient_to_query(ingredient: str) -> str:
+    """Convert a raw ingredient line into a cleaner shopping search query."""
+    text = ingredient.strip().lower()
+
+    # Remove parenthetical notes and common optional markers.
+    text = re.sub(r"\([^)]*\)", " ", text)
+    text = re.sub(r"\boptional\b", " ", text)
+    text = re.sub(r"\s*-\s*optional.*$", "", text)
+    text = re.sub(r"\bdeveined\b|\bdeshelled\b|\bbeaten\b|\bfinely\b|\bthinly\b", " ", text)
+    text = re.sub(r"\b(chopped|minced|diced|sliced|julienned|cubed|cut)\b", " ", text)
+    text = re.sub(r"(\d)\s*-\s*(oz|lb|lbs|kg|g|ml|l)\b", r"\1\2", text)
+
+    # Keep the primary phrase before commas/semicolons.
+    text = re.split(r"[,;]", text, maxsplit=1)[0].strip()
+
+    tokens = [t for t in text.split() if t]
+
+    while tokens and (tokens[0] in LEADING_FILLER_WORDS or _is_amount_token(tokens[0])):
+        tokens.pop(0)
+
+    # Drop one leading connector in ranges, e.g. "to" in "2 to 3 cloves".
+    if tokens and tokens[0] in {"to", "or"}:
+        tokens.pop(0)
+
+    # Drop leading measurement words and size descriptors.
+    while tokens and tokens[0] in MEASUREMENT_UNITS:
+        tokens.pop(0)
+    while tokens and tokens[0] in SIZE_WORDS:
+        tokens.pop(0)
+
+    query = _normalize_whitespace(" ".join(tokens))
+    return query or ingredient.strip()
+
+
+def ingredient_to_queries(ingredient: str) -> list[str]:
+    """Build ordered search queries, from most normalized to safe fallback."""
+    primary = ingredient_to_query(ingredient)
+    fallback = _normalize_whitespace(re.sub(r"\([^)]*\)", " ", ingredient)).lower()
+
+    synonym_primary = _apply_query_synonyms(primary)
+    synonym_fallback = _apply_query_synonyms(fallback)
+
+    queries: list[str] = []
+    for q in (synonym_primary, primary, synonym_fallback, fallback):
+        clean_q = q.strip()
+        if clean_q and clean_q not in queries:
+            queries.append(clean_q)
+
+    return queries
+
+
 def compile_weekly_grocery_list(meal_plan: dict[str, dict[str, Any]]) -> list[str]:
     """Extract all ingredients from the weekly meal plan and generate a clean shopping list."""
     all_ingredients: list[str] = []
@@ -222,26 +336,37 @@ def compile_weekly_grocery_list(meal_plan: dict[str, dict[str, Any]]) -> list[st
 
 def shop_items(driver: WebDriver, items: list[str]) -> None:
     """Search Walmart for each item and add the first result to cart when possible."""
-    for name in items:
-        logger.info(f"Searching for {name}.")
-        search_box = driver.find_element(By.ID, SEARCH_INPUT_ID)
-        search_box.clear()
-        search_box.send_keys(name)
-        search_box.submit()
+    for item in items:
+        queries = ingredient_to_queries(item)
+        selected_query = None
+        products = []
 
-        try:
-            WebDriverWait(driver, DEFAULT_SEARCH_WAIT_SECONDS).until(
-                EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".search-result-gridview-item"))
-            )
-        except TimeoutException:
-            logger.warning(f"No search results for {name}.")
-            driver.get(WALMART_BASE_URL)
-            continue
+        for query in queries:
+            logger.info(f"Searching for '{query}' from ingredient '{item}'.")
+            search_box = driver.find_element(By.ID, SEARCH_INPUT_ID)
+            search_box.clear()
+            search_box.send_keys(query)
+            search_box.submit()
 
-        products = driver.find_elements(By.CSS_SELECTOR, ".search-result-gridview-item")
-        if not products:
-            logger.warning(f"No products found for {name}.")
+            try:
+                WebDriverWait(driver, DEFAULT_SEARCH_WAIT_SECONDS).until(
+                    EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".search-result-gridview-item"))
+                )
+            except TimeoutException:
+                logger.warning(f"No search results for '{query}'.")
+                driver.get(WALMART_BASE_URL)
+                continue
+
+            products = driver.find_elements(By.CSS_SELECTOR, ".search-result-gridview-item")
+            if products:
+                selected_query = query
+                break
+
+            logger.warning(f"No products found for '{query}'.")
             driver.get(WALMART_BASE_URL)
+
+        if not products or selected_query is None:
+            logger.warning(f"Skipping ingredient with no product match: '{item}'.")
             continue
 
         products[0].find_element(By.TAG_NAME, "a").click()
@@ -252,9 +377,9 @@ def shop_items(driver: WebDriver, items: list[str]) -> None:
             )
             add_btn = driver.find_element(By.XPATH, "//button[contains(text(), 'Add to cart') or contains(text(), 'Add to Cart')]")
             add_btn.click()
-            logger.info(f"{name} added to cart.")
+            logger.info(f"Added to cart: '{selected_query}'.")
         except TimeoutException:
-            logger.warning(f"Could not add '{name}' to cart (no Add to Cart button found).")
+            logger.warning(f"Could not add '{selected_query}' to cart (no Add to Cart button found).")
 
         driver.get(WALMART_BASE_URL)
         WebDriverWait(driver, DEFAULT_HOME_WAIT_SECONDS).until(
