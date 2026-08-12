@@ -3,7 +3,7 @@
 ## Meal Planner
   
 This Python script generates a meal plan for the week by randomly selecting a meal option for each day of the week.
-You can get the meal plan straight to your inbox _along with the ingredients to eliminate the task of creating a shopping list_. As of February 2025, you can now add the daily meals to your your [!calendar](Media/Decision paralysis one pager.pdf).
+You can get the meal plan straight to your inbox _along with the ingredients to eliminate the task of creating a shopping list_. As of February 2025, you can now add the daily meals to your [calendar](Media/Decision%20paralysis%20one%20pager.pdf).
 
 ![The output content](Media/Outputs/meal_planner_email.png)
 
