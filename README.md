@@ -3,16 +3,14 @@
 ## Meal Planner
   
 This Python script generates a meal plan for the week by randomly selecting a meal option for each day of the week.
-You can get the meal plan straight to your inbox _along with the ingredients to eliminate the task of creating a shopping list_. As of February 2025, you can now add the daily meals to your your calendar.
+You can get the meal plan straight to your inbox _along with the ingredients to eliminate the task of creating a shopping list_. As of February 2025, you can now add the daily meals to your your [!calendar](Media/Decision paralysis one pager.pdf).
 
 ![The output content](Media/Outputs/meal_planner_email.png)
 
-Adding ingredients to the walmart cart is inspired by this repo: https://github.com/orenrimer/grocery-list-automation
 
 __Requirements__
   
 - Python Python 3.11.8
-- [requirements.txt](requirements.txt)
   
 __Customization__
   
@@ -32,7 +30,6 @@ or get a text message or an email.\
 __Requirements__
   
 - Python Python 3.11.8
-- [requirements.txt](requirements.txt)
   
 __Customization__
   
