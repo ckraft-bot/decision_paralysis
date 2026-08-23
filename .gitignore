@@ -14,3 +14,61 @@ token.json
 
 # App files (optional if generated)
 PyWhatKit_DB.txt
+
+# Calendar
+.ics
+
+# Python tooling and build artifacts
+.Python
+build/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test and coverage
+.coverage
+.coverage.*
+.pytest_cache/
+.hypothesis/
+.tox/
+.nox/
+htmlcov/
+coverage.xml
+nosetests.xml
+
+# Type checkers and linters
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# pyenv
+.python-version
+
+# PEP 582
+__pypackages__/

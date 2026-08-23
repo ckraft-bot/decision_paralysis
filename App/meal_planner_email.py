@@ -408,24 +408,34 @@ ORDER_OUT_OPTIONS = [
 ]
 
 DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
+SCHOOL_DAYS = {'Tuesday', 'Thursday'}
 
 
 def generate_meal_plan_dict():
     """Generate a weekly meal plan as a dictionary with meals and corresponding ingredients."""
     order_out_day = random.choice(DAYS_OF_WEEK)
-    meal_plan = {
-        day: random.choice(ORDER_OUT_OPTIONS) if day == order_out_day else random.choice(COOK_OPTIONS)
-        for day in DAYS_OF_WEEK
-    }
-    
-    meal_plan_with_ingredients = {
-        day: {
+    meal_plan = {}
+
+    for day in DAYS_OF_WEEK:
+        if day in SCHOOL_DAYS:
+            meal = "school"
+        elif day == order_out_day:
+            meal = random.choice(ORDER_OUT_OPTIONS)
+        else:
+            meal = random.choice(COOK_OPTIONS)
+        meal_plan[day] = meal
+
+    meal_plan_with_ingredients = {}
+    for day, meal in meal_plan.items():
+        if meal == "school":
+            ingredients = "No menu selection needed — eat at school."
+        else:
+            ingredients = format_ingredients_html(INGREDIENTS.get(meal, "Order out or ingredients not available"))
+
+        meal_plan_with_ingredients[day] = {
             "Meal": meal,
-            "Ingredients": format_ingredients_html(INGREDIENTS.get(meal, "Order out or ingredients not available"))
+            "Ingredients": ingredients,
         }
-        for day, meal in meal_plan.items()
-    }
 
     return meal_plan_with_ingredients
 
